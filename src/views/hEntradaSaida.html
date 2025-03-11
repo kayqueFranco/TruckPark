@@ -13,7 +13,53 @@
 </head>
 <body>
     <div class="container">
-        <h1> Horario de  entrada e saida</h1>
+        <h1 class="d-flex justify-content-center mb-4"> Horário de  entrada e saida</h1>
+    </div>
+    <div class="container">
+        <form action="" id="frmHentradasaida" class="mt-2 row g-3">
+            <!--Buscar o camião-->
+            <div class="col-md-6">
+                <h2></h2>
+                <input type="text" class="form-control" id="searchHentradasaida" maxlength="30"spellcheck="false">
+            </div>
+            <div class="col-md-4">
+                <button type="button" class="btn btn-primary" id="btnRead" onclick="searchCaminhao()">Buscar</button>
+            </div>
+            <hr class="mt-4 border-primary border -1">
+
+            <!--Data de entrada-->
+            <div class="col-md-3">
+                <label for="inputDataentrada" class="form-label">Data de entrada </label>
+                <input type="date" class="form-control" id="inputDataentrada" spellcheck="false" required maxlength="10">
+            </div>
+
+            <!--Horário de entrada-->
+            <div class="col-md-2">
+                <label for="inputHentrada" class="form-label">Horário de entrada</label>
+                <input type="number" class="form-control" id="inputHentrada" spellcheck="false" required  disabled maxlength="5">
+            </div>
+
+
+            
+            <!--Data de saida-->
+            <div class="col-md-3">
+                <label for="inputDatasaida" class="form-label">Data de saída </label>
+                <input type="date" class="form-control" id="inputDarasaida" spellcheck="false" required disabled maxlength="10">
+            </div>
+
+            <!--Horário de saída-->
+            <div class="col-md-2">
+                <label for="inputHsaida" class="form-label">Horário de saída</label>
+                <input type="number" class="form-control" id="inputHsaida" spellcheck="false" required disabled maxlength="5">
+            </div>
+            
+            <!--Botões-->
+            <div class="mt-5">
+                <button type="submit" class="btn btn btn-success" id="btnsave"> Adicionar</button>
+                <button type="button" class="btn btn-danger" id="btnDelete">Excluir</button>
+            </div>
+
+        </form>
     </div>
 </body>
 </html>
