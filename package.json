@@ -1,0 +1,23 @@
+{
+  "name": "truckpark",
+  "version": "1.0.0",
+  "description": "desenvolvimento de um sistema desktop para gestão de ordem de serviço de Estacionamento de camião.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .", 
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kayqueFranco/TruckPark.git"
+  },
+  "author": "Kayque Franco",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kayqueFranco/TruckPark/issues"
+  },
+  "homepage": "https://github.com/kayqueFranco/TruckPark#readme",
+  "devDependencies": {
+    "electron": "^34.2.0"
+  }
+}

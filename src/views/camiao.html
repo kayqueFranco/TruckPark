@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camião</title>
+     <!--Bootstrap-->
+     <link rel="stylesheet" href="../public/css/bootstrap.min.css">
+     <!--css personalizar-->
+     <link rel="stylesheet" href="../public/css/style.css">
+     <!--Inpedir a execulção de scripts externos ou não autorizados-->
+     <meta http-equiv="content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
+</head>
+<body>
+    <div class="container">
+        <h1 class="d-flex justify-content-center mb-4">Caminhão</h1>
+    </div>
+
+<div class="container">
+    <form id="frmCamiao" class="mt-2 row g-3">
+        <!--Buscar camião-->
+        <div class="col-md-6">
+            <input type="text" class="form-control" id="searchCaminhao" maxlength="30" spellcheck="false">
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary" id="btnRead" onclick="searchCaminhao()">Buscar</button>
+        </div>
+        <!--Linhas-->
+        <hr class="mt-4 border-primary border -1">
+
+        <!--placa-->
+        <div class="col-md-2">
+         <label for="inputPlacaCaminhao" class="form-label">Placa</label>
+         <input type="text" class="form-control" id="inputPlacaCaminhao" spellcheck="false" required maxlength="8">
+        </div>
+
+        <!--Modelo-->
+        <div class="col-md-3">
+            <label for="inputModelCaminhao" class="form-label">Modelo</label>
+            <input type="text" class="form-control" id="inputModelCainhao" spellcheck="false" required maxlength="30">
+        </div>
+
+        <!--Ano-->
+        <div class="col-md-2">
+            <label for="inputyearCaminhao" class="form-label">Ano</label>
+            <input type="number" class="form-control" id="inputyearCaminhao" spellcheck="false" required maxlength="4">
+        </div>
+
+        <!--Descrição-->
+        <div class="col-md-6">
+            <label for="inputDescripitionCaminhao" class="form-label">Descrição</label>
+            <input type="text" class="form-control" id="inputDescripitionCaminhao" spellcheck="false" required maxlength="100">
+        </div>
+        <!--Botões-->
+        <div class="mt-5">
+            <button type="submit" class="btn btn-success" id="btnCreate">Adicionar</button>
+            <button type="submit" class="btn btn-warning" id="btnUpdate">Editar</button>
+            <button type="button" class="btn btn-danger" id="btnDelete"> Excluir</button>
+            <button type="reset" class="btn " id="btnReset" onclick="resetForm()"></button>
+        </div>
+
+    </form>
+</div>
+</body>
+</html>
