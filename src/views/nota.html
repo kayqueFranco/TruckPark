@@ -12,8 +12,52 @@
      <meta http-equiv="content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
 </head>
 <body>
+    
     <div class="container">
-        <h1>Nota</h1>
+        <form id="frmNota" class="mt-2 row g-3">
+            <!--Buscar Cliente-->
+            <div class="col-md-4">
+                <input type="text" class="form-control" id="searchNota" maxlength="30" spellcheck="false" placeholder="Buscar cliente">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-primary" id="btnRead" onclick="searchNota()">Buscar</button>
+            </div>
+            <!--Buscar caminhão-->
+            <div class="col-md-4">
+                <input type="text" class="form-control" id="SearchNota" maxlength="30" spellcheck="false" placeholder="Buscar Caminhão">
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-primary" id="btnReaD" onclick="SearchNota()">Buscar</button>
+            </div>
+            <!--Linhas-->
+            <hr class="mt-4 border-primary border -1">
+            <!--Numero de nota-->
+            <div class="col-md-4">
+                <label for="inputNnota" class="form-label">Numero de nota</label>
+                <input type="number" class="form-control" id="inputNnota" spellcheck="false" disabled >
+            </div>
+            <!--Data de entrada e saida do veiculo-->
+            <div class="col-md-4">
+                <label for="inputDentradanota" class="form-label">Data de entrada</label>
+                <input type="date" class="form-control" id="inputDentradanota" spellcheck="false" disabled>
+            </div>
+            <div class="col-md-4">
+                <label for="inputDsaidanota" class="form-label">Data de entrada</label>
+                <input type="date" class="form-control" id="inputDsaidanota" spellcheck="false" disabled>
+            </div>
+            <!--Relatório-->
+            <div class="col-md-12">
+                <label for="inputRelatorionota" class="form-label">Relatoriodo</label>
+                <textarea class="form-control" id="inputRelatorionota" rows="4" maxlength="200"></textarea>
+            </div>
+            <!--Botões-->
+            <div class="mt-5">
+                <button type="submit" class="btn btn-success" id="bntCrate">Gerar nota</button>
+                <button type="button" class="btn btn-danger" id="btnDelete">Excluir nota</button>
+                <button type="submit" class="btn btn-warning" id="btnUpdate">Editar nota</button>
+                <button type="button" class="btn btn-primary">Imprimir nota</button>
+            </div>
+        </form>
     </div>
 </body>
 </html>

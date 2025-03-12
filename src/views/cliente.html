@@ -25,6 +25,8 @@
         <div class="col-md-4">
             <button type="button" class="btn btn-primary" id="btnRead" onclick="searchClient()">Buscar</button>
         </div>
+        
+
         <!--Linhas-->
         <hr class="mt-4 border-primary border -1">
 
@@ -49,14 +51,14 @@
        <!--CEP-->
        <div class="col-md-2">
         <label for="inputCEPClient" class="form-label">CEP</label>
-        <input type="text" class="form-control" id="inputCEPClient" spellcheck="false" required maxlength="9">
+        <input type="text" class="form-control" id="inputCEPClient" spellcheck="false" required maxlength="9" onblur="buscarCEP()" >
        </div>
 
         
        <!--Lougradouro-->
        <div class="col-md-6">
         <label for="inputAddressClient" class="form-label">Lougradouro</label>
-        <input type="text" class="form-control" id="inputCEPClient" spellcheck="false" required maxlength="30">
+        <input type="text" class="form-control" id="inputAddressClient" spellcheck="false" required maxlength="30">
        </div>
 
        <!--Numero-->
@@ -132,12 +134,8 @@
         <button type="reset" class="btn " id="btnReset" onclick="resetForm()"></button>
 
     </div>
-
-
-
-
-
     </form>
   </div>
+  <script src="rendererCliente.js"></script>
 </body>
 </html>

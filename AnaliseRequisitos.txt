@@ -1,0 +1,22 @@
+1. Cadastro de clientes
+- Nome completo
+- CPF/CNPJ
+- Endereço
+- Telefone e e-mail
+
+2. Cadatro de Caminhão
+- Placa 
+- Modelo
+- Ano
+- Descrição
+
+3. Horário data entrada e saída
+- data e horário de entrada
+- data e horário de saida
+
+4. Nota
+- Número de nota
+- cliente
+- caminhão
+-data e horário de entrada e saida
+- termos de condições de responsabilidade.
