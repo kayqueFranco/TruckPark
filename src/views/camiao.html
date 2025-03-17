@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camião</title>
+    <title>Caminhão</title>
      <!--Bootstrap-->
      <link rel="stylesheet" href="../public/css/bootstrap.min.css">
      <!--css personalizar-->
@@ -12,20 +12,24 @@
      <meta http-equiv="content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
 </head>
 <body>
-    <div class="container">
-        <h1 class="d-flex justify-content-center mb-4">Caminhão</h1>
-    </div>
+    
 
 <div class="container">
     <form id="frmCamiao" class="mt-2 row g-3">
-        <!--Buscar camião-->
-        <div class="col-md-6">
-            <input type="text" class="form-control" id="searchCaminhao" maxlength="30" spellcheck="false">
-        </div>
+        <!--Buscar Cliente-->
         <div class="col-md-4">
-            <button type="button" class="btn btn-primary" id="btnRead" onclick="searchCaminhao()">Buscar</button>
+            <input type="text" class="form-control" id="searchNota" maxlength="30" spellcheck="false" placeholder="Buscar cliente">
         </div>
-        
+        <div class="col-md-2">
+            <button type="button" class="btn btn-primary" id="btnRead" onclick="searchNota()">Buscar</button>
+        </div>
+        <!--Buscar caminhão-->
+        <div class="col-md-4">
+            <input type="text" class="form-control" id="SearchNota" maxlength="30" spellcheck="false" placeholder="Buscar Caminhão">
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-primary" id="btnReaD" onclick="SearchNota()">Buscar</button>
+        </div>
         <!--Linhas-->
         <hr class="mt-4 border-primary border -1">
 
