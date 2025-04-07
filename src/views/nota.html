@@ -42,7 +42,7 @@
                 <input type="date" class="form-control" id="inputDentradanota" spellcheck="false" disabled>
             </div>
             <div class="col-md-4">
-                <label for="inputDsaidanota" class="form-label">Data de entrada</label>
+                <label for="inputDsaidanota" class="form-label">Data de Saída</label>
                 <input type="date" class="form-control" id="inputDsaidanota" spellcheck="false" disabled>
             </div>
             <!--Relatório-->
@@ -50,6 +50,37 @@
                 <label for="inputRelatorionota" class="form-label">Relatoriodo</label>
                 <textarea class="form-control" id="inputRelatorionota" rows="4" maxlength="200"></textarea>
             </div>
+             <!-- Orçamento do serviço -->
+             <div class="col-md-3">
+                <label for="inputOcamento" class="form-label">Orçamento do serviço</label>
+                <input type="text" class="form-control" id="inputOrcamento" spellcheck="false" required maxlength="30">
+               </div>
+
+               <!-- Forma de pagamento -->
+            <div class="col-md-3">
+                <label for="inputFpagamento" class="form-label">Forma de pagamento</label>
+                <select type="text" class="form-select" id="inputFpagamento" spellcheck="false" required maxlength="20">
+                    <option value=""></option>
+                    <option>Pix</option>
+                    <option>Cartão Débito</option>
+                    <option>Cartão Crédito</option>
+                    <option>Dinheiro</option>
+                    <option>Boleto</option>
+                </select>
+               </div>
+                <!-- Status -->
+            <div class="col-md-3">
+                <label class="form-label">Status da OS</label>
+                <select class="form-select" id="notaStatus">
+                    <option value=""></option>
+                    <option>Aberta</option>
+                    <option>Em andamento</option>
+                    <option>Finalizada</option>
+                    <option>Cancelada</option>
+                </select>
+            </div>
+
+
             <!--Botões-->
             <div class="mt-5">
                 <button type="submit" class="btn btn-success" id="bntCrate">Gerar nota</button>
@@ -59,5 +90,6 @@
             </div>
         </form>
     </div>
+    <script src="rendererNota.js"></script>
 </body>
 </html>

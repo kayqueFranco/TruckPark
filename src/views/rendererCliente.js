@@ -93,30 +93,6 @@ api.resetForm((args)=>{
 //======================== FIm do CRUD Create/Update===================================
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // === Função para aplicar máscara no CPF ===
 function aplicarMascaraCPF(campo) {
     let cpf = campo.value.replace(/\D/g, ""); // Remove caracteres não numéricos
