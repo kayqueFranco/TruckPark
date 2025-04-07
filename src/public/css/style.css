@@ -16,6 +16,9 @@ footer {
     text-align: center;
     position: fixed;
     bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
 }
 
 footer p {
