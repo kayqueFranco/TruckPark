@@ -16,10 +16,13 @@ const clientModel = require('./src/models/Clientes.js')
 const notaModel = require('./src/models/Nota.js')
 
 
+const caminhaoModel = require('./src/models/caminhao.js')
+
 // importação de pacote jspdf(npm i jspdf)
 const { jspdf, default: jsPDF } = require('jspdf')
 // importação de biblioteca fs (nativa do javaScript) para manipulaçãp de arquivos(no caso arquivo PDF)
 const fs = require('fs')
+const caminhao = require('./src/models/caminhao.js')
 
 //Janela principal
 let win
@@ -467,7 +470,6 @@ ipcMain.on('new-nota', async (event, Nota) => {
       PagamentoNota: Nota.formNota,
        StatusNota:Nota.statusNota
     })
-    console.log(newNota)
     await newNota.save()
     dialog.showMessageBox({
       // customização 
@@ -504,3 +506,47 @@ ipcMain.on('new-nota', async (event, Nota) => {
 
 
 //  Cadastro caminaho ======================================================
+ipcMain.on('new-Caminhao',async(event,Caminhao)=>{
+  console.log(Caminhao)
+  try {
+    const newCaminhao = new caminhaoModel({
+      PlacaCaminhao:Caminhao.PlacCamn,
+      ModeloCaminhao:Caminhao.ModelCamin,
+      AnoCaminhao:Caminhao.AnoCamin,
+      DescricaoCaminhao:Caminhao.DescCamin
+    })
+    await newCaminhao.save()
+
+  await newNota.save()
+    dialog.showMessageBox({
+      // customização 
+      type: 'info',
+      title: "Aviso",
+      message: "Cliente adicionado com sucesso",
+      buttons: ['ok']
+    }).then((result) => {
+      // ação ao precionar o botão ok
+      if (result.response === 0) {
+        // enviar um pedido para o renderizador limpar os campos e resetar as comfigurações pre defenidas
+        event.reply('resert-form')
+
+      }
+    })
+
+
+  } catch (error) {
+    if (error.code === 11000) {
+      dialog.showMessageBox({
+        type: 'error',
+        title: "Atenção",
+        message: "Caminhão ja cadastrado \nVerifique se digitou corretamente",
+        buttons: ['ok']
+      }).then((result) => {
+        if (result.response === 0) {
+          // 
+        }
+      })
+    }
+    console.log(error)
+  }
+})

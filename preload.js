@@ -19,6 +19,7 @@ contextBridge.exposeInMainWorld('api', {
     dbStatus: (message) => ipcRenderer.on('db-status', message),
     newClient:(client) => ipcRenderer.send('new-client',client),
     newNota : (Nota) => ipcRenderer.send('new-nota',Nota),
+    NewCaminhao:(Caminhao)=> ipcRenderer.send('new-caminhao',Caminhao),
     resetForm:(args) => ipcRenderer.on('resert-form',args)
 
 })

@@ -8,6 +8,12 @@ const {model , Schema} = require('mongoose')
 
 
 const caminhaoSchema = new Schema ({
-    PlacaCaminhao: {type:String}
-    
-})
+    PlacaCaminhao: {type:String},
+    ModeloCaminhao: {type:String},
+    AnoCaminhao: {type:String},
+    DescricaoCaminhao:{type:String}
+},{versionKey:false})// não versionar os dados armazenar 
+
+// exporta pala o main o modelo de dados
+// obs: Clientes será o nome da coleção 
+module.exports = model('Caminhao' , caminhaoSchema)
