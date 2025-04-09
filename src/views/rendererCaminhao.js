@@ -11,7 +11,7 @@ frmCamiao.addEventListener('submit',async(event)=>{
     console.log(PlacaCaminhao.value,ModeloCaminhao.value,AnoCaminhao.value,DescricaoCaminhao.value)
 
 
-    const Caminhao ={
+    const caminhao ={
         PlacCamin: PlacaCaminhao.value,
         ModelCamin:ModeloCaminhao.value,
         AnoCamin:AnoCaminhao.value,
@@ -19,5 +19,15 @@ frmCamiao.addEventListener('submit',async(event)=>{
     }
 
 
-    api.NewCaminhao(Caminhao)
+    api.newCaminhao(caminhao)
+})
+
+function resetForm(){
+    // Limpar os campos e resetar o formulario com as configurações pré definidas
+    location.reload()
+}
+
+// recebendo do pepido do main para resetar o form
+api.resetForm((args)=>{
+    resetForm()
 })

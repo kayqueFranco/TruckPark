@@ -7,6 +7,7 @@
 // contextBrigde (segurança) ipcRenderer (comunicação)
 const { contextBridge, ipcRenderer } = require('electron')
 
+
 // enviar ao main um pedido para conexão com o banco de dados e troca do icone no processo de renderização (index.html - renderer.html)
 ipcRenderer.send('db-connect')
 
@@ -19,7 +20,7 @@ contextBridge.exposeInMainWorld('api', {
     dbStatus: (message) => ipcRenderer.on('db-status', message),
     newClient:(client) => ipcRenderer.send('new-client',client),
     newNota : (Nota) => ipcRenderer.send('new-nota',Nota),
-    NewCaminhao:(Caminhao)=> ipcRenderer.send('new-caminhao',Caminhao),
+    newCaminhao: (caminhao) => ipcRenderer.send('new-caminhao',caminhao),
     resetForm:(args) => ipcRenderer.on('resert-form',args)
 
 })

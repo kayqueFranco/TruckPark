@@ -28,3 +28,21 @@ footer p {
     color: white;
     padding-top: 7px;
 }
+
+
+/* Botao reset */
+#btnReset {
+    width: 64px;
+    height: 64px;
+    background-image: url('../img/vasoura.png');
+    border: none;
+    cursor: pointer;
+}
+
+#logo{
+    position: fixed;
+    bottom: 40px;
+    right: 5px;
+    border: none;
+    cursor: none;
+}

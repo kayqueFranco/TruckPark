@@ -31,3 +31,14 @@ frmNota.addEventListener('submit',async(event)=>{
     // uso do preload.js
     api.newNota(Nota) 
 }) 
+
+function resetForm(){
+    // Limpar os campos e resetar o formulario com as configurações pré definidas
+    location.reload()
+}
+
+// recebendo do pepido do main para resetar o form
+api.resetForm((args)=>{
+    resetForm()
+})
+

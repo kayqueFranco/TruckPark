@@ -121,11 +121,14 @@ function camiaoWindow() {
   if (main) {
     camiao = new BrowserWindow({
       width: 1010,
-      height: 720,
+      height: 490,
       //autoHideMenuBar: true,
       resizable: false,
       parent: main,
-      modal: true
+      modal: true,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js')
+      }
     })
   }
   camiao.loadFile('./src/views/camiao.html')
@@ -140,7 +143,7 @@ function hentradasaidaWindow() {
   if (main) {
     horaioentradasaida = new BrowserWindow({
       width: 1010,
-      height: 720,
+      height: 450,
       //autoHideMenuBar: true,
       resizable: false,
       parent: main,
@@ -158,7 +161,7 @@ function notaWindow() {
   if (main) {
     nota = new BrowserWindow({
       width: 1010,
-      height: 720,
+      height: 620,
       //autoHideMenuBar: true,
       resizable: false,
       parent: main,
@@ -390,16 +393,16 @@ async function relatorioClientes() {
     // definir o tamanho da fonte
     doc.setFontSize(16)
     // escrever um texto (titulo)
-    doc.text("Reltório de clintes", 14, 45)//x,y (mm)
+    doc.text("Reltório de clientes", 14, 45)//x,y (mm)
     // inserir a data atual no relatório 
     const dataAtual = new Date().toLocaleDateString('pt-BR')
     doc.setFontSize(18)
     doc.text(`Data: ${dataAtual}`, 160, 10)
     // variavel de apoio na formatação
     let y = 60
-    // doc.text("Nome",14,y)
-    doc.text("Telefone", 80, y)
-    doc.text("CPF", 130, y)
+     doc.text("Nome",14,y)
+    doc.text("Telefone", 100, y)
+    doc.text("CPF", 150, y)
     y += 5
     // desenha uma linha 
     doc.setLineWidth(0.5)//expessura da linha
@@ -415,16 +418,16 @@ async function relatorioClientes() {
         y = 20 //resetar a variavel y 
         // redezenhar o cabeçalho
         doc.text("Nome", 14, y)
-        doc.text("Telefone", 80, y)
-        doc.text("CPF", 130, y)
+        doc.text("Telefone", 100, y)
+        doc.text("CPF", 150, y)
         y += 5
         doc.setLineWidth(0.5)
         doc.line(10, y, 200, y)
         y += 10
       }
       doc.text(c.nomeCliente, 14, y),
-        doc.text(c.foneCliente, 80, y),
-        doc.text(c.cpfCliente || "N/A", 130, y)
+        doc.text(c.foneCliente, 100, y),
+        doc.text(c.cpfCliente || "N/A", 150, y)
       y += 10 //quebra de linha
 
     })
@@ -506,18 +509,18 @@ ipcMain.on('new-nota', async (event, Nota) => {
 
 
 //  Cadastro caminaho ======================================================
-ipcMain.on('new-Caminhao',async(event,Caminhao)=>{
-  console.log(Caminhao)
+ipcMain.on('new-caminhao',async(event,Caminhao)=>{
+  console.log(caminhao)
   try {
-    const newCaminhao = new caminhaoModel({
+    const newcaminhao = new caminhaoModel({
       PlacaCaminhao:Caminhao.PlacCamn,
       ModeloCaminhao:Caminhao.ModelCamin,
       AnoCaminhao:Caminhao.AnoCamin,
       DescricaoCaminhao:Caminhao.DescCamin
     })
-    await newCaminhao.save()
+    await newcaminhao.save()
 
-  await newNota.save()
+  
     dialog.showMessageBox({
       // customização 
       type: 'info',
