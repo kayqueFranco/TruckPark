@@ -16,9 +16,17 @@ function buscarCEP(){
         })
         .catch(error => console.log(error))
 }
+// -=========================fim do buscar cep
+
+// vetor global que será usaddo na manipulação dos dados 
+let arrayClient = []
+
+
+
 //  Capturar o foco na busca pelo nome do cliente 
 // a constante foco obtem o elemento html(input)indentificado como 'searchClient'
-const foco = document.getElementById('searchCliet')
+const foco = document.getElementById('searchClient')
+
 
 // iniciar a janela de clientes alterando as propriedades de alguns elementos
 document.addEventListener('DOMContentLoaded',()=>{
@@ -140,6 +148,52 @@ function validarCPF() {
     campo.style.color = "green";
     return true;
 }
+// ===========================================fim crud=================================
+
+// CRud Read============================================================================
+function buscarCliente(){
+    // console.log("Teste botão buscar")
+    // Passo 1: capturar o nome do cliente
+    let name = document.getElementById('searchClient').value
+    console.log(name)// teste do passo 1
+    api.searchName(name)//Passo 2: envido do nome ao main
+    // Recebimento dos dados do cliente
+    api.renderClient((event,dataClient)=>{
+        console.log(dataClient)//Teste do passo 5
+        //  passo 6: renderizar os dados do cliente no formulario
+        //  - criar um vetor global para manipulação dos dados
+        //  - criar uma constante para cinverter os dados recebidos (string)
+        // para o formato jason
+        // usar o laço forEach para percorrer o vetor e setar os campos (caixas de texto)
+        // do formulário
+        const dadosCliente = JSON.parse(dataClient)
+        // atribuir ao vetor os dados do cliente
+        arrayClient = dadosCliente
+        // extrair os dados do cliente
+        arrayClient.forEach((c)=>{
+            nameClient.value = c.nomeCliente,
+            cpfClient.value = c.cpfCliente,
+            telefoneClient.value = c.foneCliente,
+            cepClient.value = c.cepCLiente,
+            logradouroClient.value = c.logradouroCliente,
+            numeroClient.value = c.numeroCliente,
+            complementClient.value = c.complementoCliente,
+            bairroClient.value = c.bairroCLiente,
+            cidadeClient.value = c.cidadeCliente,
+            ufClient.value = c.ufCliente
+
+
+            
+
+        })
+    })
+}
+
+// ==========Fim CRUd Read===============================================================
+
+
+
+
 
 // Adicionar eventos para CPF
 cpfClient.addEventListener("input", () => aplicarMascaraCPF(cpfClient)); // Máscara ao digitar

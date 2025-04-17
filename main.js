@@ -553,3 +553,31 @@ ipcMain.on('new-caminhao',async(event,Caminhao)=>{
     console.log(error)
   }
 })
+// fim os =========================================================================
+// ======CRUD read=====================================================================
+ipcMain.on('search-Name',async(event,name)=>{
+  // console.log("teste IPC search-Name")
+  // console.log(name)//Teste do passo 2: (importante!)
+  // Passos 3 e 4 busca dos dados do cliente no banco
+  // find({NOme do cliente: name}) - busca pelo nome
+  // REgExp(name,i) - i (insensitive/ Inginorar maiúsculo ou minúscolo)
+  try {
+    const dataClient = await clientModel.find({
+      $or: [
+        {nomeCliente: new RegExp(name, 'i') },
+        { cpfCliente: new RegExp(name, 'i') }
+      ]
+    })
+    console.log(dataClient)//teste passos 3 e 4 (iportante!)
+    // Passo 5:
+    // enviando os dados do cliente ao renderercliente
+    // OBS: IPC so trabalha com string, então é mecessário converter o json para string
+    event.reply('render-Client',JSON.stringify(dataClient))
+  } catch (error) {
+    console.log(error)
+  }
+
+})
+
+
+// -============FIM CRUDRead====================================================

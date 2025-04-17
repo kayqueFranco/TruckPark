@@ -21,6 +21,8 @@ contextBridge.exposeInMainWorld('api', {
     newClient:(client) => ipcRenderer.send('new-client',client),
     newNota : (Nota) => ipcRenderer.send('new-nota',Nota),
     newCaminhao: (caminhao) => ipcRenderer.send('new-caminhao',caminhao),
-    resetForm:(args) => ipcRenderer.on('resert-form',args)
+    resetForm:(args) => ipcRenderer.on('resert-form',args),
+    searchName: (name) => ipcRenderer.send('search-Name',name),
+    renderClient:(dataClient) => ipcRenderer.on('render-Client',dataClient)
 
 })
