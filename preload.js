@@ -23,6 +23,8 @@ contextBridge.exposeInMainWorld('api', {
     newCaminhao: (caminhao) => ipcRenderer.send('new-caminhao',caminhao),
     resetForm:(args) => ipcRenderer.on('resert-form',args),
     searchName: (name) => ipcRenderer.send('search-Name',name),
-    renderClient:(dataClient) => ipcRenderer.on('render-Client',dataClient)
+    renderClient:(dataClient) => ipcRenderer.on('render-Client',dataClient),
+    validateSearch:()=> ipcRenderer.send('validate-search'),
+    setClient: (args)=> ipcRenderer.on('set-client',args)
 
 })
