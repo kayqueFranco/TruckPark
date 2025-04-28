@@ -10,6 +10,7 @@ const {model , Schema} = require('mongoose')
 const caminhaoSchema = new Schema ({
     PlacaCaminhao: {type:String},
     ModeloCaminhao: {type:String},
+    MarcaCaminhao:{type:String},
     AnoCaminhao: {type:String},
     DescricaoCaminhao:{type:String}
 },{versionKey:false})// não versionar os dados armazenar 

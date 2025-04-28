@@ -51,6 +51,8 @@ let complementClient = document.getElementById('inputcomplementClient')
 let bairroClient = document.getElementById('inputNeighorhoodClient')
 let cidadeClient = document.getElementById('inputcityClient')
 let ufClient = document.getElementById('uf')
+// Captura do id dos cliente (usado no delete e update)
+let id = document.getElementById('idClient')
 
 // teste importante
 // ===========================================================================
@@ -60,22 +62,22 @@ let ufClient = document.getElementById('uf')
 
 
 // // Função para manipular o evento da tecla Enter
- function teclaEnter(event){
-//     // se a tecla enter for pressionada
-     if (event.key === "Enter"){
-         event.preventDefault()//ignora o comportamento padrão 
-         // associar o Enter a busca pelo cliente
-         buscarCliente()
-     }
- }
+function teclaEnter(event) {
+    //     // se a tecla enter for pressionada
+    if (event.key === "Enter") {
+        event.preventDefault()//ignora o comportamento padrão 
+        // associar o Enter a busca pelo cliente
+        buscarCliente()
+    }
+}
 
 // // função para restaurar o padrão da telca enter (submit)
- function restaurarEter(){
-     frmClient.removeEventListener('keydown',teclaEnter)
- } 
+function restaurarEter() {
+    frmClient.removeEventListener('keydown', teclaEnter)
+}
 
- // escuta do evento Tecla Enter
- frmClient.addEventListener('keydown',teclaEnter)
+// escuta do evento Tecla Enter
+frmClient.addEventListener('keydown', teclaEnter)
 
 // // =========fim da manipulação da tecla Enter=================================================
 // // ===========================================================================================
@@ -211,7 +213,8 @@ function buscarCliente() {
             arrayClient = dadosCliente
             // extrair os dados do cliente
             arrayClient.forEach((c) => {
-                nameClient.value = c.nomeCliente,
+                id.value = c._id,
+                    nameClient.value = c.nomeCliente,
                     cpfClient.value = c.cpfCliente,
                     telefoneClient.value = c.foneCliente,
                     cepClient.value = c.cepCLiente,
@@ -221,6 +224,11 @@ function buscarCliente() {
                     bairroClient.value = c.bairroCLiente,
                     cidadeClient.value = c.cidadeCliente,
                     ufClient.value = c.ufCliente
+                // Bloqueio do botão adicionar
+                btnCreate.disabled = true
+                // Desbloqueio dos botões editar e excluir
+                btnUpdate.disabled = false
+                btnDelete.disabled = false
 
 
 
@@ -232,28 +240,37 @@ function buscarCliente() {
 
 }
 // setar o cliente não cadastrado (recortar do campo de busca e colar no campo nome )
- api.setClient((args)=>{
-     // criar uma variavel para amarzenar o valor digitado no campo de busca(nome ou cpf)
-     let campoBusca = document.getElementById('searchClient').value
-     // foco no campo de nome do cliente
-     nameClient.focus()
-     cpfClient.focus()
-     // remover o valor digitado no campo de busca
-     foco.value = ""
-     if (/^[A-Za-z\s]+$/.test(campoBusca)) {
+api.setClient((args) => {
+    // criar uma variavel para amarzenar o valor digitado no campo de busca(nome ou cpf)
+    let campoBusca = document.getElementById('searchClient').value
+    // foco no campo de nome do cliente
+    nameClient.focus()
+    cpfClient.focus()
+    // remover o valor digitado no campo de busca
+    foco.value = ""
+    if (/^[A-Za-z\s]+$/.test(campoBusca)) {
         // Se contém apenas letras e espaços
         nameClient.value = campoBusca;
-      } else {
+    } else {
         // Se contém apenas números
         cpfClient.value = campoBusca;
-      } 
- })
+    }
+})
 // ==========Fim CRUd Read===============================================================
-
-
-
 
 
 // Adicionar eventos para CPF
 cpfClient.addEventListener("input", () => aplicarMascaraCPF(cpfClient)); // Máscara ao digitar
 cpfClient.addEventListener("blur", validarCPF); // Validação ao perder o foco
+
+
+
+
+// ================= CRUD DELETE================================================================
+
+function excluirCliente(){
+    console.log(id.value)//Passo 1: receber do form o id 
+    api.deleteClient(id.value)//passo 2: enviar o id ao main
+}
+
+// ===========================FIM CRUD DELETE ===================================================

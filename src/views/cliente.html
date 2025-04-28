@@ -29,6 +29,8 @@
         <!--Linhas-->
         <hr class="mt-4 border-primary border -1">
 
+        <!--Id do cliente (oculto)-->
+        <input type="text"  id="idClient">
         <!--Nome-->
        <div class="col-md-8">
             <label for="inputNameCliet" class="form-label">Nome</label>
@@ -129,7 +131,7 @@
     <div class="mt-5">
         <button type="submit" class="btn btn-success" id="btnCreate">Adicionar</button>
         <button type="submit" class="btn btn-warning" id="btnUpdate">Editar</button>
-        <button type="button" class="btn btn-danger" id="btnDelete"> Excluir</button>
+        <button type="button" class="btn btn-danger" id="btnDelete" onclick="excluirCliente()"> Excluir</button>
         <button type="reset" class="btn " id="btnReset" onclick="resetForm()"></button>
 
     </div>

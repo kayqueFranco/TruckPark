@@ -513,8 +513,9 @@ ipcMain.on('new-caminhao',async(event,Caminhao)=>{
   console.log(caminhao)
   try {
     const newcaminhao = new caminhaoModel({
-      PlacaCaminhao:Caminhao.PlacCamn,
+      PlacaCaminhao:Caminhao.PlacCamin,
       ModeloCaminhao:Caminhao.ModelCamin,
+      MarcaCaminhao:Caminhao.MarcaCamin,
       AnoCaminhao:Caminhao.AnoCamin,
       DescricaoCaminhao:Caminhao.DescCamin
     })
@@ -619,3 +620,35 @@ ipcMain.on('search-Name',async(event,name)=>{
 
 
 // -============FIM CRUDRead====================================================
+
+
+
+
+// =====================================================================================
+// ============================CRUD DELETE==============================================
+
+
+ipcMain.on('delete-client',async(event,id)=>{
+   console.log(id) //teste do passo 2 : recebimento do id
+   try {
+      //importante - confirmar a exclusão
+      // client é o nome da variavel que repreenta a janela
+      const {response} = await dialog.showMessageBox(client,{
+        type:'warning',
+        title: "Atenção!",
+        message: "Deseja excluir esse cliente?\nEsta ação não podera ser desfeita.",
+        buttons: ['cancelar','Excluir'] //[0,1]
+      })
+      if(response === 1){
+        console.log("teste do if de exclusão")
+        // Passo 3: excluir o registro do cliente
+        const delClient = await clientModel.findByIdAndDelete(id)
+        event.reply('resert-form')
+      }
+   } catch (error) {
+    console.log(error)
+   }
+})
+
+
+// =============================FIM CRUUD DELETE=================================================

@@ -46,3 +46,10 @@ footer p {
     border: none;
     cursor: none;
 }
+
+
+/* ocutar o campo id do cliente */
+#idClient{
+    display: none;
+    
+}
