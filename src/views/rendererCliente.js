@@ -92,26 +92,57 @@ frmClient.addEventListener('submit', async (event) => {
     // teste importante (recebimento dos dados no formulário - passo 1 fluxo)
 
 
-    console.log(nameClient.value, cpfClient.value, telefoneClient.value, cepClient.value, logradouroClient.value, numeroClient.value, complementClient.value, bairroClient.value, cidadeClient.value, ufClient.value)
+    console.log(nameClient.value, cpfClient.value, telefoneClient.value, cepClient.value, logradouroClient.value, numeroClient.value, complementClient.value, bairroClient.value, cidadeClient.value, ufClient.value, id.value)
+
     // Limpa o CPF antes de salvar no banco
     let cpfSemFormatacao = cpfClient.value.replace(/\D/g, "");
-    //  criar um objeto para armazenar os dados do cliente antes de enviar ao main
-    const client = {
-        nameCli: nameClient.value,
-        cpfCli: cpfSemFormatacao,
-        telCli: telefoneClient.value,
-        cepCli: cepClient.value,
-        lograCli: logradouroClient.value,
-        numCli: numeroClient.value,
-        compliCli: complementClient.value,
-        bairroCli: bairroClient.value,
-        cidadeCli: cidadeClient.value,
-        ufCli: ufClient.value
 
+    // estrategia usada para utilizar o submit para criar um novo cliente ou alterar os dados de um cliente
+    // se existir id significa que exite um cliente se não significa que é para adicionar um novo cliente
+    if (id.value === "") {
+        // executar o métodoo para adastrar um novo cliente
+        
+        //  criar um objeto para armazenar os dados do cliente antes de enviar ao main
+        const client = {
+            nameCli: nameClient.value,
+            cpfCli: cpfSemFormatacao,
+            telCli: telefoneClient.value,
+            cepCli: cepClient.value,
+            lograCli: logradouroClient.value,
+            numCli: numeroClient.value,
+            compliCli: complementClient.value,
+            bairroCli: bairroClient.value,
+            cidadeCli: cidadeClient.value,
+            ufCli: ufClient.value
+
+        }
+        // enviar ao main o objeto client - passo 2 - fluxo
+        // uso do preload.js
+        api.newClient(client)
+    } else {
+        // executar o método par alterar os dados do cliente
+        // console.log(id.value) para texte se está funcionando
+        //  criar um objeto para armazenar os dados do cliente antes de enviar ao main
+        const client = {
+            idCli: id.value,
+            nameCli: nameClient.value,
+            cpfCli: cpfSemFormatacao,
+            telCli: telefoneClient.value,
+            cepCli: cepClient.value,
+            lograCli: logradouroClient.value,
+            numCli: numeroClient.value,
+            compliCli: complementClient.value,
+            bairroCli: bairroClient.value,
+            cidadeCli: cidadeClient.value,
+            ufCli: ufClient.value
+
+        }
+        // enviar ao main o objeto client - passo 2 - fluxo
+        // uso do preload.js
+        api.updateClient(client)
     }
-    // enviar ao main o objeto client - passo 2 - fluxo
-    // uso do preload.js
-    api.newClient(client)
+
+
 })
 
 
@@ -268,7 +299,7 @@ cpfClient.addEventListener("blur", validarCPF); // Validação ao perder o foco
 
 // ================= CRUD DELETE================================================================
 
-function excluirCliente(){
+function excluirCliente() {
     console.log(id.value)//Passo 1: receber do form o id 
     api.deleteClient(id.value)//passo 2: enviar o id ao main
 }

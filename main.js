@@ -121,7 +121,7 @@ function camiaoWindow() {
   if (main) {
     camiao = new BrowserWindow({
       width: 1010,
-      height: 490,
+      height: 520,
       //autoHideMenuBar: true,
       resizable: false,
       parent: main,
@@ -161,7 +161,7 @@ function notaWindow() {
   if (main) {
     nota = new BrowserWindow({
       width: 1010,
-      height: 620,
+      height: 720,
       //autoHideMenuBar: true,
       resizable: false,
       parent: main,
@@ -400,7 +400,7 @@ async function relatorioClientes() {
     doc.text(`Data: ${dataAtual}`, 160, 10)
     // variavel de apoio na formatação
     let y = 60
-     doc.text("Nome",14,y)
+    doc.text("Nome", 14, y)
     doc.text("Telefone", 100, y)
     doc.text("CPF", 150, y)
     y += 5
@@ -468,10 +468,13 @@ ipcMain.on('new-nota', async (event, Nota) => {
 
   try {
     const newNota = new notaModel({
+      nameNota: Nota. NomeNot,
+      cpfNota: Nota.cpfNot,
+      placNota: Nota. placNot,
       RelatorioNota: Nota.RelaNota,
       OrcamentoNota: Nota.orcaNota,
       PagamentoNota: Nota.formNota,
-       StatusNota:Nota.statusNota
+      StatusNota: Nota.statusNota
     })
     await newNota.save()
     dialog.showMessageBox({
@@ -509,19 +512,19 @@ ipcMain.on('new-nota', async (event, Nota) => {
 
 
 //  Cadastro caminaho ======================================================
-ipcMain.on('new-caminhao',async(event,Caminhao)=>{
+ipcMain.on('new-caminhao', async (event, Caminhao) => {
   console.log(caminhao)
   try {
     const newcaminhao = new caminhaoModel({
-      PlacaCaminhao:Caminhao.PlacCamin,
-      ModeloCaminhao:Caminhao.ModelCamin,
-      MarcaCaminhao:Caminhao.MarcaCamin,
-      AnoCaminhao:Caminhao.AnoCamin,
-      DescricaoCaminhao:Caminhao.DescCamin
+      PlacaCaminhao: Caminhao.PlacCamin,
+      ModeloCaminhao: Caminhao.ModelCamin,
+      MarcaCaminhao: Caminhao.MarcaCamin,
+      AnoCaminhao: Caminhao.AnoCamin,
+      DescricaoCaminhao: Caminhao.DescCamin
     })
     await newcaminhao.save()
 
-  
+
     dialog.showMessageBox({
       // customização 
       type: 'info',
@@ -555,21 +558,21 @@ ipcMain.on('new-caminhao',async(event,Caminhao)=>{
   }
 })
 // fim os =========================================================================
-// ======CRUD read=====================================================================
+// ======CRUD read Cliente=====================================================================
 
 // Validação de busca(preenchimento obrigatório)
-ipcMain.on('validate-search',()=>{
+ipcMain.on('validate-search', () => {
   dialog.showMessageBox({
-    type:'warning',
-    title:'Atenção',
+    type: 'warning',
+    title: 'Atenção',
     message: "Prencha o campo de busca",
-    buttons:['OK']
+    buttons: ['OK']
   })
 })
 
 
 
-ipcMain.on('search-Name',async(event,name)=>{
+ipcMain.on('search-Name', async (event, name) => {
   // console.log("teste IPC search-Name")
   // console.log(name)//Teste do passo 2: (importante!)
   // Passos 3 e 4 busca dos dados do cliente no banco
@@ -578,26 +581,26 @@ ipcMain.on('search-Name',async(event,name)=>{
   try {
     const dataClient = await clientModel.find({
       $or: [
-        {nomeCliente: new RegExp(name, 'i') },
+        { nomeCliente: new RegExp(name, 'i') },
         { cpfCliente: new RegExp(name, 'i') }
       ]
     })
     console.log(dataClient)//teste passos 3 e 4 (iportante!)
 
     // melhoria da experiência do usuário (se o cliente não estiver cadastrado, alertar o usuário e questionar se ele quer capturar este cliente.Se não quiser cadastrar, limpar os campos, se quiser cadastrar recortar o nome do cliente ou o cpf do campo de busca e colar no campo nome ou cpf)
-    
+
     //  se o vetor estiver vazio [](cliente não adastrado)
-    if(dataClient.length === 0){
+    if (dataClient.length === 0) {
       dialog.showMessageBox({
         type: 'warning',
         title: "Aviso",
         message: "Cliente não cadastado. \n deseja cadastrar esse cliente?",
-        defaultId:0, //botão 0
-        buttons:['Sim','Não'] //[0,1]-
+        defaultId: 0, //botão 0
+        buttons: ['Sim', 'Não'] //[0,1]-
 
 
-      }).then((result)=>{
-        if (result.response === 0 ) {
+      }).then((result) => {
+        if (result.response === 0) {
           // enviar ao renderizador um pedido para setar os campos (recortar do campo de busc e colar no campo nome)
           event.reply('set-client')
         } else {
@@ -611,7 +614,7 @@ ipcMain.on('search-Name',async(event,name)=>{
     // Passo 5:
     // enviando os dados do cliente ao renderercliente
     // OBS: IPC so trabalha com string, então é mecessário converter o json para string
-    event.reply('render-Client',JSON.stringify(dataClient))
+    event.reply('render-Client', JSON.stringify(dataClient))
   } catch (error) {
     console.log(error)
   }
@@ -628,27 +631,80 @@ ipcMain.on('search-Name',async(event,name)=>{
 // ============================CRUD DELETE==============================================
 
 
-ipcMain.on('delete-client',async(event,id)=>{
-   console.log(id) //teste do passo 2 : recebimento do id
-   try {
-      //importante - confirmar a exclusão
-      // client é o nome da variavel que repreenta a janela
-      const {response} = await dialog.showMessageBox(client,{
-        type:'warning',
-        title: "Atenção!",
-        message: "Deseja excluir esse cliente?\nEsta ação não podera ser desfeita.",
-        buttons: ['cancelar','Excluir'] //[0,1]
-      })
-      if(response === 1){
-        console.log("teste do if de exclusão")
-        // Passo 3: excluir o registro do cliente
-        const delClient = await clientModel.findByIdAndDelete(id)
-        event.reply('resert-form')
-      }
-   } catch (error) {
+ipcMain.on('delete-client', async (event, id) => {
+  console.log(id) //teste do passo 2 : recebimento do id
+  try {
+    //importante - confirmar a exclusão
+    // client é o nome da variavel que repreenta a janela
+    const { response } = await dialog.showMessageBox(client, {
+      type: 'warning',
+      title: "Atenção!",
+      message: "Deseja excluir esse cliente?\nEsta ação não podera ser desfeita.",
+      buttons: ['cancelar', 'Excluir'] //[0,1]
+    })
+    if (response === 1) {
+      console.log("teste do if de exclusão")
+      // Passo 3: excluir o registro do cliente
+      const delClient = await clientModel.findByIdAndDelete(id)
+      event.reply('resert-form')
+    }
+  } catch (error) {
     console.log(error)
-   }
+  }
 })
 
 
 // =============================FIM CRUUD DELETE=================================================
+
+// ==============================================================================================
+
+// ===============================CRUD UPDATE===================================================
+ipcMain.on('update-client', async (event, client) => {
+  console.log(client) //teste importante (recebimento dos dados do cliente)
+  try {
+    // Criar uma nova estrutura de dados usando a cla modelo
+    // ATENÇÃO os atributos precisam ser identificados ao modelo de dados Cliente.js e os valores são  definidos pelo conteudo de objeto 
+    const updateClient = await clientModel.findByIdAndUpdate(
+      client.idCli,
+      {
+        nomeCliente: client.nameCli,
+        cpfCliente: client.cpfCli,
+        foneCliente: client.telCli,
+        cepCLiente: client.cepCli,
+        logradouroCliente: client.lograCli,
+        numeroCliente: client.numCli,
+        complementoCliente: client.compliCli,
+        bairroCLiente: client.bairroCli,
+        cidadeCliente: client.cidadeCli,
+        ufCliente: client.ufCli
+
+      },
+      {
+        new: true
+
+      }
+    )
+    //  confimação 
+     // mensagem de confomação
+     dialog.showMessageBox({
+      // customização 
+      type: 'info',
+      title: "Aviso",
+      message: " Dados do cliente alterados com sucesso",
+      buttons: ['ok']
+    }).then((result) => {
+      // ação ao precionar o botão ok
+      if (result.response === 0) {
+        // enviar um pedido para o renderizador limpar os campos e resetar as comfigurações pre defenidas
+        event.reply('resert-form')
+
+      }
+
+    })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+
+// =================================FIM CRUD UPDATE==============================================

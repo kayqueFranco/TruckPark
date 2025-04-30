@@ -1,40 +1,61 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nota</title>
-     <!--Bootstrap-->
-     <link rel="stylesheet" href="../public/css/bootstrap.min.css">
-     <!--css personalizar-->
-     <link rel="stylesheet" href="../public/css/style.css">
-     <!--Inpedir a execulção de scripts externos ou não autorizados-->
-     <meta http-equiv="content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="../public/css/bootstrap.min.css">
+    <!--css personalizar-->
+    <link rel="stylesheet" href="../public/css/style.css">
+    <!--Inpedir a execulção de scripts externos ou não autorizados-->
+    <meta http-equiv="content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
 </head>
+
 <body>
-    
+
     <div class="container">
         <form id="frmNota" class="mt-2 row g-3">
             <!--Buscar Cliente-->
             <div class="col-md-4">
-                <input type="text" class="form-control" id="searchNota" maxlength="30" spellcheck="false" placeholder="Buscar cliente">
+                <input type="text" class="form-control" id="searchNota" maxlength="30" spellcheck="false"
+                    placeholder="Buscar cliente">
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-primary" id="btnRead" onclick="searchNota()">Buscar</button>
             </div>
             <!--Buscar caminhão-->
             <div class="col-md-4">
-                <input type="text" class="form-control" id="SearchNota" maxlength="30" spellcheck="false" placeholder="Buscar Caminhão">
+                <input type="text" class="form-control" id="SearchNota" maxlength="30" spellcheck="false"
+                    placeholder="Buscar Caminhão">
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-primary" id="btnReaD" onclick="SearchNota()">Buscar</button>
+            </div>
+            <!--Nome-->
+            <div class="col-md-4">
+                <label for="inputNamePlaca" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="inputNameNota" spellcheck="false" required maxlength="21">
+            </div>
+
+            <!--CPF-->
+            <div class="col-md-3">
+                <label for="inputCPFNota" class="form-label">CPF/CNPJ</label>
+                <input type="text" class="form-control" id="inputCPFNota" spellcheck="false" maxlength="30">
+            </div>
+
+            <!--Plca-->
+            <div class="col-md-4">
+                <label for="inputPlacNota" class="form-label">Placa</label>
+                <input type="tel" class="form-control" id="inputPlacNota" spellcheck="false" required maxlength="12">
             </div>
             <!--Linhas-->
             <hr class="mt-4 border-primary border -1">
             <!--Numero de nota-->
             <div class="col-md-4">
                 <label for="inputNnota" class="form-label">Numero de nota</label>
-                <input type="number" class="form-control" id="inputNnota" spellcheck="false" disabled >
+                <input type="number" class="form-control" id="inputNnota" spellcheck="false" disabled>
             </div>
             <!--Data de entrada e saida do veiculo-->
             <div class="col-md-4">
@@ -48,15 +69,15 @@
             <!--Relatório-->
             <div class="col-md-12">
                 <label for="inputRelatorionota" class="form-label">Relatoriodo</label>
-                <textarea class="form-control" id="inputRelatorionota" rows="4" maxlength="200"></textarea>
+                <textarea class="form-control" id="inputRelatorionota" rows="3" maxlength="200"></textarea>
             </div>
-             <!-- Orçamento do serviço -->
-             <div class="col-md-3">
+            <!-- Orçamento do serviço -->
+            <div class="col-md-3">
                 <label for="inputOcamento" class="form-label">Orçamento do serviço</label>
                 <input type="text" class="form-control" id="inputOrcamento" spellcheck="false" required maxlength="30">
-               </div>
+            </div>
 
-               <!-- Forma de pagamento -->
+            <!-- Forma de pagamento -->
             <div class="col-md-3">
                 <label for="inputFpagamento" class="form-label">Forma de pagamento</label>
                 <select type="text" class="form-select" id="inputFpagamento" spellcheck="false" required maxlength="20">
@@ -67,8 +88,8 @@
                     <option>Dinheiro</option>
                     <option>Boleto</option>
                 </select>
-               </div>
-                <!-- Status -->
+            </div>
+            <!-- Status -->
             <div class="col-md-3">
                 <label class="form-label">Status da OS</label>
                 <select class="form-select" id="notaStatus">
@@ -92,4 +113,5 @@
     </div>
     <script src="rendererNota.js"></script>
 </body>
+
 </html>

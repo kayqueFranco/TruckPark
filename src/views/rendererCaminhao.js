@@ -33,3 +33,25 @@ function resetForm(){
 api.resetForm((args)=>{
     resetForm()
 })
+
+
+
+// ===================Crud Read =========================
+function buscarCaminhao(){
+    // console.log("Teste botão buscae")
+    // Passo 1: capturar o nome do caminhao
+    let caminhao = document.getElementById('SearchTruck').value
+    console.log(caminhao)// teste do passo 1
+
+    // validaçãop do campo onrigatório
+    // se o campo de busca não for prenchido
+    if(caminhao ===""){
+        
+    }
+}
+
+
+
+
+// =============================FIM CRUd REad=====================
+

@@ -8,6 +8,7 @@ const {model , Schema} = require('mongoose')
 
 
 const caminhaoSchema = new Schema ({
+
     PlacaCaminhao: {type:String},
     ModeloCaminhao: {type:String},
     MarcaCaminhao:{type:String},
