@@ -1,6 +1,6 @@
 // captura dos dados dos input do formulario (passo1 :Fluxo)
 let  frmNota = document.getElementById('frmNota')
-let  nameNota= document.getElementById('inputNamePlaca')
+let  nameNota= document.getElementById('inputNameNota')
 let cpfNota = document.getElementById('inputCPFNota')
 let placNota = document.getElementById('inputPlacNota')
 let  nNota = document.getElementById('inputNnota')
@@ -11,6 +11,8 @@ let Orcamento = document.getElementById('inputOrcamento')
 let Fpagamento = document.getElementById('inputFpagamento')
 let notaStatus = document.getElementById('notaStatus')
 
+let id = document.getElementById('idNot')
+
 
 
 
@@ -19,13 +21,17 @@ let notaStatus = document.getElementById('notaStatus')
 frmNota.addEventListener('submit',async(event)=>{
     event.preventDefault()
     //Teste importante ( recebimento dos dados do formulario - passo 1 do fluxo)
-    console.log(/*nameNota.value,*//*cpfNota.value,placNota.value,*/nNota.value,Dentradanota.value,Dsaidanota.value,Relatorionota.value,Orcamento.value,Fpagamento.value,notaStatus.value)
+    console.log(nameNota.value, cpfNota.value,placNota.value,nNota.value,Dentradanota.value,Dsaidanota.value,Relatorionota.value,Orcamento.value,Fpagamento.value,notaStatus.value,id.value)
 
     // Criar um objeto para armazenar os dados do cliente amtes de enviar ao main
     const Nota = {
-        NomeNot:nameNota.value,
-        // cpfNot:cpfNota.value,
-        // placNot:placNota.value,
+        idNOt : id.value,
+        nNota:nNota.value,
+        NameN:nameNota.value,
+        PlacN:placNota.value,
+        cpfN:cpfNota.value,
+        Dentradanota:Dentradanota.value,
+        Dsaidanota:Dsaidanota.value,
         RelaNota:Relatorionota.value,
         orcaNota:Orcamento.value,
         formNota:Fpagamento.value,
@@ -48,3 +54,30 @@ api.resetForm((args)=>{
     resetForm()
 })
 
+
+
+// ===================================================================
+
+
+
+
+
+
+
+
+
+// CRUD REAd==========================================================
+function searchClientNota(){
+    // console.log("teste Botão")
+    // Capturar o cliente
+    let nota = document.getElementById('searchNameNota').value
+    console.log(nota)
+
+    if(nota === ""){
+        
+
+        foco.focus()
+    } else{
+        
+    }
+}

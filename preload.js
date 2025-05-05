@@ -15,7 +15,6 @@ ipcRenderer.send('db-connect')
 contextBridge.exposeInMainWorld('api', {
     clientWindow: () => ipcRenderer.send('client-Window'),
     camiaoWindow: () => ipcRenderer.send('camiao-Window'),
-    hentradasaidaWindow: () => ipcRenderer.send('hentradasaida-Window'),
     notaWindow: () => ipcRenderer.send('nota-Window'),
     dbStatus: (message) => ipcRenderer.on('db-status', message),
     newClient:(client) => ipcRenderer.send('new-client',client),
@@ -23,6 +22,7 @@ contextBridge.exposeInMainWorld('api', {
     newCaminhao: (caminhao) => ipcRenderer.send('new-caminhao',caminhao),
     resetForm:(args) => ipcRenderer.on('resert-form',args),
     searchName: (name) => ipcRenderer.send('search-Name',name),
+    searchNameNota: (nota)=> ipcRenderer.send('search-NameNota',nota),
     renderClient:(dataClient) => ipcRenderer.on('render-Client',dataClient),
     validateSearch:()=> ipcRenderer.send('validate-search'),
     setClient: (args)=> ipcRenderer.on('set-client',args),

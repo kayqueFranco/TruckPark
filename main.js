@@ -135,24 +135,7 @@ function camiaoWindow() {
   camiao.center()
 
 }
-// janela de horario de entrada e saida
-let horaioentradasaida
-function hentradasaidaWindow() {
-  nativeTheme.themeSource = 'light'
-  const main = BrowserWindow.getFocusedWindow()
-  if (main) {
-    horaioentradasaida = new BrowserWindow({
-      width: 1010,
-      height: 450,
-      //autoHideMenuBar: true,
-      resizable: false,
-      parent: main,
-      modal: true
-    })
-  }
-  horaioentradasaida.loadFile('./src/views/hEntradaSaida.html')
-  horaioentradasaida.center()
-}
+
 // janela de emixão de nota
 let nota
 function notaWindow() {
@@ -229,10 +212,7 @@ const template = [
         label: 'Camião',
         click: () => camiaoWindow()
       },
-      {
-        label: 'Horario entrada e saida',
-        click: () => hentradasaidaWindow()
-      },
+      
       {
         label: 'emixão de nota',
         click: () => notaWindow()
@@ -255,7 +235,8 @@ const template = [
         click: () => relatorioClientes()
       },
       {
-        label: 'OS abertas'
+        label: 'OS abertas',
+        click: ()=>relatorioOs()
       },
       {
         label: 'OS concluídas'
@@ -458,7 +439,90 @@ async function relatorioClientes() {
 
 // ==Fim relatório clientes======================================================================
 // ==============================================================================================
+// Relatório da os (aberta ou fechada)===========================================================
 
+async function relatorioOs() {
+  try {
+    const NotaAberta = await notaModel.find({StatusNota:"Aberta"}).sort({DataEntradaNota:1 })
+   
+    const doc = new jsPDF('p', 'mm', 'a4')
+    // Inserir imagem no dcumento pdf
+    // imagePath(caminho da imagem que será inserida no pdf )
+    //imageBase64(usp da biblioteca fs para ler o arquivo no formato png)
+    const imagePath = path.join(__dirname, 'src', 'public', 'img', 'logo.jpg')
+    const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' })
+    doc.addImage(imageBase64, 'PNG', 5, 8)
+    // definir o tamanho da fonte
+    doc.setFontSize(16)
+    // escrever um texto (titulo)
+    doc.text("Reltório de OS aberta", 14, 45)//x,y (mm)
+    // inserir a data atual no relatório 
+    const dataAtual = new Date().toLocaleDateString('pt-BR')
+    doc.setFontSize(18)
+    doc.text(`Data: ${dataAtual}`, 160, 10)
+    // variavel de apoio na formatação
+    let y = 60
+    doc.text("Número da nota", 14, y)
+    doc.text("nome", 100, y)
+    doc.text("Data entrada", 150, y)
+    y += 5
+    // desenha uma linha 
+    doc.setLineWidth(0.5)//expessura da linha
+    doc.line(10, y, 200, y)//inicio e fim
+    // Renderizar os clientes cadastrado no banco
+    y += 10 //espaçamnento da linha
+    // percorrrer o vetor clientes(obtido do banco ) usando o laço forEcha (equivalente aolaço for) 
+    NotaAberta.forEach(() => {
+      // adicionar outra paginar se a folha for preenchida (estratégia é saber o tamanho da folha)
+      //  folha A4 y = 297mm
+      if (y > 280) {
+        doc.addPage()
+        y = 20 //resetar a variavel y 
+        // redezenhar o cabeçalho
+        doc.text("Número da nota", 14, y)
+        doc.text("Nome", 100, y)
+        doc.text("Data entrada", 150, y)
+        y += 5
+        doc.setLineWidth(0.5)
+        doc.line(10, y, 200, y)
+        y += 10
+      }
+      doc.text(NumNota, 14, y),
+        doc.text(NomeNota, 100, y),
+        doc.text(DataEntradaNota || "N/A", 150, y)
+      y += 10 //quebra de linha
+
+    })
+
+    // Adicionar numeração automatica de pagina
+    const paginas = doc.internal.getNumberOfPages()
+    for (let i = 1; i <= paginas; i++) {
+      doc.setPage(i)
+      doc.setFontSize(10)
+      doc.text(`Pagina ${i} de ${paginas}`, 105, 290, { align: 'center' })
+    }
+
+
+    // definir o caminho do caminho temporario
+    const tempDir = app.getPath('temp')
+    const filePath = path.join(tempDir, 'osAberta.pdf')
+
+
+    // salvar temporariamente o arquivo
+    doc.save(filePath)
+    // abrir o arquivo rio aplicativo padrão de leitura de pdf do computador de usuario 
+    shell.openPath(filePath)
+   
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+
+
+
+// fim do relatório da os=========================================================================
 
 
 // OS==============================================================================================
@@ -468,9 +532,13 @@ ipcMain.on('new-nota', async (event, Nota) => {
 
   try {
     const newNota = new notaModel({
-      nameNota: Nota. NomeNot,
-      cpfNota: Nota.cpfNot,
-      placNota: Nota. placNot,
+      NumNota :Nota. nNota,
+      NomeNota:Nota. NameN,
+      cpfNota:Nota.cpfN,
+      PlacaNota:Nota.PlacN,
+    
+      DataEntradaNota: Nota.Dentradanota,
+      DataSaidaNota: Nota.Dsaidanota,
       RelatorioNota: Nota.RelaNota,
       OrcamentoNota: Nota.orcaNota,
       PagamentoNota: Nota.formNota,

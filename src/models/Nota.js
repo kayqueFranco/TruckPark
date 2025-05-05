@@ -7,9 +7,12 @@
 const { model, Schema } = require('mongoose')
 
 const notaSchema = new Schema({
-   PlacaNota:{type:String},
-   cpfNota:{type:String},
+   NumNota:{type:String},
    NomeNota: { type: String },
+   cpfNota:{type:String},
+   PlacaNota:{type:String}, 
+   DataEntradaNota:{type:String},
+   DataSaidaNota:{type:String},
    RelatorioNota: { type: String },
    OrcamentoNota: { type: String },
    PagamentoNota: { type: String },

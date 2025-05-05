@@ -15,9 +15,7 @@ function cliente(){
      api.camiaoWindow()
  }
  
- function hentradasaida(){
-     api.hentradasaidaWindow()
- }
+ 
  
  function nota(){
      api.notaWindow()

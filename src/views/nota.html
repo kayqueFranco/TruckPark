@@ -19,23 +19,25 @@
         <form id="frmNota" class="mt-2 row g-3">
             <!--Buscar Cliente-->
             <div class="col-md-4">
-                <input type="text" class="form-control" id="searchNota" maxlength="30" spellcheck="false"
+                <input type="text" class="form-control" id="searchNameNota" maxlength="30" spellcheck="false"
                     placeholder="Buscar cliente">
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-primary" id="btnRead" onclick="searchNota()">Buscar</button>
+                <button type="button" class="btn btn-primary" id="btnRead" onclick="searchClientNota()">Buscar</button>
             </div>
             <!--Buscar caminhão-->
             <div class="col-md-4">
-                <input type="text" class="form-control" id="SearchNota" maxlength="30" spellcheck="false"
+                <input type="text" class="form-control" id="SearchCaminNota" maxlength="30" spellcheck="false"
                     placeholder="Buscar Caminhão">
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-primary" id="btnReaD" onclick="SearchNota()">Buscar</button>
+                <button type="button" class="btn btn-primary" id="btnReaD" onclick="SearchTruckNota()">Buscar</button>
             </div>
+            <!--Id-->
+            <input type="text"  id="idNot">
             <!--Nome-->
             <div class="col-md-4">
-                <label for="inputNamePlaca" class="form-label">Nome</label>
+                <label for="inputNameNota" class="form-label">Nome</label>
                 <input type="text" class="form-control" id="inputNameNota" spellcheck="false" required maxlength="21">
             </div>
 
@@ -55,16 +57,16 @@
             <!--Numero de nota-->
             <div class="col-md-4">
                 <label for="inputNnota" class="form-label">Numero de nota</label>
-                <input type="number" class="form-control" id="inputNnota" spellcheck="false" disabled>
+                <input type="number" class="form-control" id="inputNnota" spellcheck="false" >
             </div>
             <!--Data de entrada e saida do veiculo-->
             <div class="col-md-4">
                 <label for="inputDentradanota" class="form-label">Data de entrada</label>
-                <input type="date" class="form-control" id="inputDentradanota" spellcheck="false" disabled>
+                <input type="date" class="form-control" id="inputDentradanota" spellcheck="false" >
             </div>
             <div class="col-md-4">
                 <label for="inputDsaidanota" class="form-label">Data de Saída</label>
-                <input type="date" class="form-control" id="inputDsaidanota" spellcheck="false" disabled>
+                <input type="date" class="form-control" id="inputDsaidanota" spellcheck="false" >
             </div>
             <!--Relatório-->
             <div class="col-md-12">
