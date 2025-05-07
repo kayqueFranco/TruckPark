@@ -22,11 +22,15 @@ contextBridge.exposeInMainWorld('api', {
     newCaminhao: (caminhao) => ipcRenderer.send('new-caminhao',caminhao),
     resetForm:(args) => ipcRenderer.on('resert-form',args),
     searchName: (name) => ipcRenderer.send('search-Name',name),
-    searchNameNota: (nota)=> ipcRenderer.send('search-NameNota',nota),
     renderClient:(dataClient) => ipcRenderer.on('render-Client',dataClient),
     validateSearch:()=> ipcRenderer.send('validate-search'),
     setClient: (args)=> ipcRenderer.on('set-client',args),
     deleteClient: (id)=> ipcRenderer.send('delete-client',id),
-    updateClient:(client)=> ipcRenderer.send('update-client',client)
+    updateClient:(client)=> ipcRenderer.send('update-client',client),
+    searchNota: ()=> ipcRenderer.send('search-nota'),
+    searchClients: (Clients) => ipcRenderer.send('search-clients',Clients),
+    listClients: (clients) => ipcRenderer.on('list-clients',clients),
+    updateCaminhao:(caminhao)=>ipcRenderer.send('update-caminhao',caminhao),
+    deleteCaminhao:(id)=>ipcRenderer.send('delete-caminhao',id)
 
 })

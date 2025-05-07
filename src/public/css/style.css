@@ -58,3 +58,17 @@ footer p {
 #idNot{
     display: none;
 }
+
+#idTruck{
+    display: none;
+}
+
+
+
+
+/*lista de clientes vinculado a nota*/
+#viewListSuggestion{
+    z-index: 2;
+    max-width: 382px;
+
+}

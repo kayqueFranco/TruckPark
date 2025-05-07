@@ -24,6 +24,11 @@ const { jspdf, default: jsPDF } = require('jspdf')
 const fs = require('fs')
 const caminhao = require('./src/models/caminhao.js')
 
+// importação do recurso 'electron-pront (dialog de input )
+// 1 instalar o recurso: npm i electron-prompt
+const prompt = require('electron-prompt')
+const { type } = require('node:os')
+
 //Janela principal
 let win
 const createWindow = () => {
@@ -212,7 +217,7 @@ const template = [
         label: 'Camião',
         click: () => camiaoWindow()
       },
-      
+
       {
         label: 'emixão de nota',
         click: () => notaWindow()
@@ -236,7 +241,7 @@ const template = [
       },
       {
         label: 'OS abertas',
-        click: ()=>relatorioOs()
+        click: () => relatorioOs()
       },
       {
         label: 'OS concluídas'
@@ -443,8 +448,8 @@ async function relatorioClientes() {
 
 async function relatorioOs() {
   try {
-    const NotaAberta = await notaModel.find({StatusNota:"Aberta"}).sort({DataEntradaNota:1 })
-   
+    const NotaAberta = await notaModel.find({ StatusNota: "Aberta" }).sort({ DataEntradaNota: 1 })
+
     const doc = new jsPDF('p', 'mm', 'a4')
     // Inserir imagem no dcumento pdf
     // imagePath(caminho da imagem que será inserida no pdf )
@@ -512,7 +517,7 @@ async function relatorioOs() {
     doc.save(filePath)
     // abrir o arquivo rio aplicativo padrão de leitura de pdf do computador de usuario 
     shell.openPath(filePath)
-   
+
   } catch (error) {
     console.log(error)
   }
@@ -532,11 +537,11 @@ ipcMain.on('new-nota', async (event, Nota) => {
 
   try {
     const newNota = new notaModel({
-      NumNota :Nota. nNota,
-      NomeNota:Nota. NameN,
-      cpfNota:Nota.cpfN,
-      PlacaNota:Nota.PlacN,
-    
+      NumNota: Nota.nNota,
+      NomeNota: Nota.NameN,
+      cpfNota: Nota.cpfN,
+      PlacaNota: Nota.PlacN,
+
       DataEntradaNota: Nota.Dentradanota,
       DataSaidaNota: Nota.Dsaidanota,
       RelatorioNota: Nota.RelaNota,
@@ -577,6 +582,61 @@ ipcMain.on('new-nota', async (event, Nota) => {
     console.log(error)
   }
 })
+
+
+
+// ========================BUscar NOta==========================================
+// ============================================================================
+ipcMain.on('search-nota', (event) => {
+  prompt({
+    title: 'Busca Nota',
+    label: 'Digite  o número da Nota:',
+    inputAttrs: {
+      type: 'text'
+    },
+    type: 'input',
+    width: 400,
+    height: 200
+  }).then((result) => {
+    if (result !== null) {
+      console.log(result)
+    }
+  })
+})
+
+
+
+
+
+
+// FIM do buscar NOta=========================================================
+// ===========================================================================
+
+
+// =============================================================================
+// ==Buscar cliente para vincular na os=========================================
+ipcMain.on('search-clients', async (event)=>{
+  try {
+    // buscar os clientes pelo nome em ordem alfabetica
+  const clients = await clientModel.find().sort({ nomeCliente: 1})
+  
+  
+  console.log(clients)//teste do passo 2
+
+
+  // passo 3:
+  event.reply('list-clients',JSON.stringify(clients))
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+
+// ==fim Buscar cliente==========================================================
+
+// FIM da NOTA===================================================================
+// ==============================================================================
+
 
 
 //  Cadastro caminaho ======================================================
@@ -753,8 +813,8 @@ ipcMain.on('update-client', async (event, client) => {
       }
     )
     //  confimação 
-     // mensagem de confomação
-     dialog.showMessageBox({
+    // mensagem de confomação
+    dialog.showMessageBox({
       // customização 
       type: 'info',
       title: "Aviso",
