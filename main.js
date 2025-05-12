@@ -16,13 +16,12 @@ const clientModel = require('./src/models/Clientes.js')
 const notaModel = require('./src/models/Nota.js')
 
 
-const caminhaoModel = require('./src/models/caminhao.js')
 
 // importação de pacote jspdf(npm i jspdf)
 const { jspdf, default: jsPDF } = require('jspdf')
 // importação de biblioteca fs (nativa do javaScript) para manipulaçãp de arquivos(no caso arquivo PDF)
 const fs = require('fs')
-const caminhao = require('./src/models/caminhao.js')
+
 
 // importação do recurso 'electron-pront (dialog de input )
 // 1 instalar o recurso: npm i electron-prompt
@@ -58,12 +57,7 @@ const createWindow = () => {
     clientWindow()
   })
 
-  ipcMain.on('camiao-Window', () => {
-    camiaoWindow()
-  })
-  ipcMain.on('hentradasaida-Window', () => {
-    hentradasaidaWindow()
-  })
+
   ipcMain.on('nota-Window', () => {
     notaWindow()
   })
@@ -117,28 +111,6 @@ function clientWindow() {
   }
   client.loadFile('./src/views/cliente.html')
   client.center()
-}
-// janela camiao
-let camiao
-function camiaoWindow() {
-  nativeTheme.themeSource = 'light'
-  const main = BrowserWindow.getFocusedWindow()
-  if (main) {
-    camiao = new BrowserWindow({
-      width: 1010,
-      height: 520,
-      //autoHideMenuBar: true,
-      resizable: false,
-      parent: main,
-      modal: true,
-      webPreferences: {
-        preload: path.join(__dirname, 'preload.js')
-      }
-    })
-  }
-  camiao.loadFile('./src/views/camiao.html')
-  camiao.center()
-
 }
 
 // janela de emixão de nota
@@ -214,11 +186,6 @@ const template = [
         click: () => clientWindow()
       },
       {
-        label: 'Camião',
-        click: () => camiaoWindow()
-      },
-
-      {
         label: 'emixão de nota',
         click: () => notaWindow()
       },
@@ -289,8 +256,10 @@ const template = [
   }
 ]
 
-
-
+// =======================================================================================
+// ***************************************************************************************
+// ******************************   CLIENTE   ********************************************
+// ***************************************************************************************
 // =========================================================================================
 // == Cliente - CRUD Create
 // recebimento do objeto que cotem  os dados do cliente
@@ -444,248 +413,7 @@ async function relatorioClientes() {
 
 // ==Fim relatório clientes======================================================================
 // ==============================================================================================
-// Relatório da os (aberta ou fechada)===========================================================
 
-async function relatorioOs() {
-  try {
-    const NotaAberta = await notaModel.find({ StatusNota: "Aberta" }).sort({ DataEntradaNota: 1 })
-
-    const doc = new jsPDF('p', 'mm', 'a4')
-    // Inserir imagem no dcumento pdf
-    // imagePath(caminho da imagem que será inserida no pdf )
-    //imageBase64(usp da biblioteca fs para ler o arquivo no formato png)
-    const imagePath = path.join(__dirname, 'src', 'public', 'img', 'logo.jpg')
-    const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' })
-    doc.addImage(imageBase64, 'PNG', 5, 8)
-    // definir o tamanho da fonte
-    doc.setFontSize(16)
-    // escrever um texto (titulo)
-    doc.text("Reltório de OS aberta", 14, 45)//x,y (mm)
-    // inserir a data atual no relatório 
-    const dataAtual = new Date().toLocaleDateString('pt-BR')
-    doc.setFontSize(18)
-    doc.text(`Data: ${dataAtual}`, 160, 10)
-    // variavel de apoio na formatação
-    let y = 60
-    doc.text("Número da nota", 14, y)
-    doc.text("nome", 100, y)
-    doc.text("Data entrada", 150, y)
-    y += 5
-    // desenha uma linha 
-    doc.setLineWidth(0.5)//expessura da linha
-    doc.line(10, y, 200, y)//inicio e fim
-    // Renderizar os clientes cadastrado no banco
-    y += 10 //espaçamnento da linha
-    // percorrrer o vetor clientes(obtido do banco ) usando o laço forEcha (equivalente aolaço for) 
-    NotaAberta.forEach(() => {
-      // adicionar outra paginar se a folha for preenchida (estratégia é saber o tamanho da folha)
-      //  folha A4 y = 297mm
-      if (y > 280) {
-        doc.addPage()
-        y = 20 //resetar a variavel y 
-        // redezenhar o cabeçalho
-        doc.text("Número da nota", 14, y)
-        doc.text("Nome", 100, y)
-        doc.text("Data entrada", 150, y)
-        y += 5
-        doc.setLineWidth(0.5)
-        doc.line(10, y, 200, y)
-        y += 10
-      }
-      doc.text(NumNota, 14, y),
-        doc.text(NomeNota, 100, y),
-        doc.text(DataEntradaNota || "N/A", 150, y)
-      y += 10 //quebra de linha
-
-    })
-
-    // Adicionar numeração automatica de pagina
-    const paginas = doc.internal.getNumberOfPages()
-    for (let i = 1; i <= paginas; i++) {
-      doc.setPage(i)
-      doc.setFontSize(10)
-      doc.text(`Pagina ${i} de ${paginas}`, 105, 290, { align: 'center' })
-    }
-
-
-    // definir o caminho do caminho temporario
-    const tempDir = app.getPath('temp')
-    const filePath = path.join(tempDir, 'osAberta.pdf')
-
-
-    // salvar temporariamente o arquivo
-    doc.save(filePath)
-    // abrir o arquivo rio aplicativo padrão de leitura de pdf do computador de usuario 
-    shell.openPath(filePath)
-
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-
-
-
-
-// fim do relatório da os=========================================================================
-
-
-// OS==============================================================================================
-ipcMain.on('new-nota', async (event, Nota) => {
-  console.log(Nota)
-
-
-  try {
-    const newNota = new notaModel({
-      NumNota: Nota.nNota,
-      NomeNota: Nota.NameN,
-      cpfNota: Nota.cpfN,
-      PlacaNota: Nota.PlacN,
-
-      DataEntradaNota: Nota.Dentradanota,
-      DataSaidaNota: Nota.Dsaidanota,
-      RelatorioNota: Nota.RelaNota,
-      OrcamentoNota: Nota.orcaNota,
-      PagamentoNota: Nota.formNota,
-      StatusNota: Nota.statusNota
-    })
-    await newNota.save()
-    dialog.showMessageBox({
-      // customização 
-      type: 'info',
-      title: "Aviso",
-      message: "Cliente adicionado com sucesso",
-      buttons: ['ok']
-    }).then((result) => {
-      // ação ao precionar o botão ok
-      if (result.response === 0) {
-        // enviar um pedido para o renderizador limpar os campos e resetar as comfigurações pre defenidas
-        event.reply('resert-form')
-
-      }
-    })
-
-
-  } catch (error) {
-    if (error.code === 11000) {
-      dialog.showMessageBox({
-        type: 'error',
-        title: "Atenção",
-        message: "Cliente ja esta Tem Nota\nVerifique se digitou corretamente",
-        buttons: ['ok']
-      }).then((result) => {
-        if (result.response === 0) {
-          // 
-        }
-      })
-    }
-    console.log(error)
-  }
-})
-
-
-
-// ========================BUscar NOta==========================================
-// ============================================================================
-ipcMain.on('search-nota', (event) => {
-  prompt({
-    title: 'Busca Nota',
-    label: 'Digite  o número da Nota:',
-    inputAttrs: {
-      type: 'text'
-    },
-    type: 'input',
-    width: 400,
-    height: 200
-  }).then((result) => {
-    if (result !== null) {
-      console.log(result)
-    }
-  })
-})
-
-
-
-
-
-
-// FIM do buscar NOta=========================================================
-// ===========================================================================
-
-
-// =============================================================================
-// ==Buscar cliente para vincular na os=========================================
-ipcMain.on('search-clients', async (event)=>{
-  try {
-    // buscar os clientes pelo nome em ordem alfabetica
-  const clients = await clientModel.find().sort({ nomeCliente: 1})
-  
-  
-  console.log(clients)//teste do passo 2
-
-
-  // passo 3:
-  event.reply('list-clients',JSON.stringify(clients))
-  } catch (error) {
-    console.log(error)
-  }
-})
-
-
-// ==fim Buscar cliente==========================================================
-
-// FIM da NOTA===================================================================
-// ==============================================================================
-
-
-
-//  Cadastro caminaho ======================================================
-ipcMain.on('new-caminhao', async (event, Caminhao) => {
-  console.log(caminhao)
-  try {
-    const newcaminhao = new caminhaoModel({
-      PlacaCaminhao: Caminhao.PlacCamin,
-      ModeloCaminhao: Caminhao.ModelCamin,
-      MarcaCaminhao: Caminhao.MarcaCamin,
-      AnoCaminhao: Caminhao.AnoCamin,
-      DescricaoCaminhao: Caminhao.DescCamin
-    })
-    await newcaminhao.save()
-
-
-    dialog.showMessageBox({
-      // customização 
-      type: 'info',
-      title: "Aviso",
-      message: "Cliente adicionado com sucesso",
-      buttons: ['ok']
-    }).then((result) => {
-      // ação ao precionar o botão ok
-      if (result.response === 0) {
-        // enviar um pedido para o renderizador limpar os campos e resetar as comfigurações pre defenidas
-        event.reply('resert-form')
-
-      }
-    })
-
-
-  } catch (error) {
-    if (error.code === 11000) {
-      dialog.showMessageBox({
-        type: 'error',
-        title: "Atenção",
-        message: "Caminhão ja cadastrado \nVerifique se digitou corretamente",
-        buttons: ['ok']
-      }).then((result) => {
-        if (result.response === 0) {
-          // 
-        }
-      })
-    }
-    console.log(error)
-  }
-})
-// fim os =========================================================================
 // ======CRUD read Cliente=====================================================================
 
 // Validação de busca(preenchimento obrigatório)
@@ -751,8 +479,6 @@ ipcMain.on('search-Name', async (event, name) => {
 
 
 // -============FIM CRUDRead====================================================
-
-
 
 
 // =====================================================================================
@@ -836,3 +562,151 @@ ipcMain.on('update-client', async (event, client) => {
 
 
 // =================================FIM CRUD UPDATE==============================================
+// ==============================================================================================
+// =============================================================================================
+// =====================================FIM CLIENTE=============================================
+// ==============================================================================================
+
+
+
+
+
+// ===============================================================================================
+
+// *********************************************************************************************
+// *********************************   OS   ****************************************************
+// *********************************************************************************************
+
+
+
+
+ipcMain.on('validate-client', (event) => {
+  dialog.showMessageBox({
+    type: "warning",
+    title: "Aviso!",
+    message: "É obrigatório vincular o cliente na ordem de serviço",
+    buttons: ['OK']
+  }).then((result) => {
+    if (result.response === 0) {
+      event.reply('set-search')
+    }
+  })
+})
+
+
+ipcMain.on('new-nota', async (event, Nota) => {
+  console.log(Nota)
+
+
+  try {
+    const newNota = new notaModel({
+      NumNota: Nota.nNota,
+      NomeNota: Nota.NameN,
+      IdCliente: Nota.idCli,
+      PlacaNota: Nota.PlacN,
+
+      DataEntradaNota: Nota.Dentradanota,
+      DataSaidaNota: Nota.Dsaidanota,
+      RelatorioNota: Nota.RelaNota,
+      OrcamentoNota: Nota.orcaNota,
+      PagamentoNota: Nota.formNota,
+      StatusNota: Nota.statusNota
+    })
+    await newNota.save()
+    dialog.showMessageBox({
+      // customização 
+      type: 'info',
+      title: "Aviso",
+      message: " Nota adicionado com sucesso",
+      buttons: ['ok']
+    }).then((result) => {
+      // ação ao precionar o botão ok
+      if (result.response === 0) {
+        // enviar um pedido para o renderizador limpar os campos e resetar as comfigurações pre defenidas
+        event.reply('resert-form')
+
+      }
+    })
+
+
+  } catch (error) {
+    if (error.code === 11000) {
+      dialog.showMessageBox({
+        type: 'error',
+        title: "Atenção",
+        message: " Nota ja esta Tem Nota\nVerifique se digitou corretamente",
+        buttons: ['ok']
+      }).then((result) => {
+        if (result.response === 0) {
+          // 
+        }
+      })
+    }
+    console.log(error)
+  }
+})
+
+
+
+// ========================BUscar NOta==========================================
+// ============================================================================
+ipcMain.on('search-nota', (event) => {
+  prompt({
+    title: 'Busca Nota',
+    label: 'Digite  o número da Nota:',
+    inputAttrs: {
+      type: 'text'
+    },
+    type: 'input',
+    width: 400,
+    height: 200
+  }).then((result) => {
+    if (result !== null) {
+      console.log(result)
+    }
+  })
+})
+
+
+
+
+
+
+// FIM do buscar NOta=========================================================
+// ===========================================================================
+
+
+// =============================================================================
+// ==Buscar cliente para vincular na os=========================================
+ipcMain.on('search-clients', async (event) => {
+  try {
+    // buscar os clientes pelo nome em ordem alfabetica
+    const clients = await clientModel.find().sort({ nomeCliente: 1 })
+
+
+    console.log(clients)//teste do passo 2
+
+
+    // passo 3:
+    event.reply('list-clients', JSON.stringify(clients))
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+// =================== FIM DO VINCULAR OS=====================================
+// ==============================================================================
+
+
+
+
+
+// =================================================================================
+// =========================== FIM A OS  ===========================================
+// ================================================================================
+
+
+
+
+
+

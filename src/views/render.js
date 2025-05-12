@@ -9,11 +9,6 @@ function cliente(){
      api.clientWindow()
  }
  
- function camiao() {
-     //console.log("teste do botão os")
-     //uso da api(autorizada no perolad.js)
-     api.camiaoWindow()
- }
  
  
  

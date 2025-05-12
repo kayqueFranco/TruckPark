@@ -27,26 +27,23 @@
             <div class="col-md-2">
                 <button type="button" class="btn btn-primary" id="btnRead" onclick="searchClientNota()">Buscar</button>
             </div>
-            <!--Buscar caminhão-->
-            <div class="col-md-4">
-                <input type="text" class="form-control" id="SearchCaminNota" maxlength="30" spellcheck="false"
-                    placeholder="Buscar Caminhão">
+             <!--Numero de nota-->
+             <div class="col-md-4">
+                <label for="inputNnota" class="form-label">Numero de nota</label>
+                <input type="number" class="form-control" id="idNot" spellcheck="false" disabled >
             </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-primary" id="btnReaD" onclick="SearchTruckNota()">Buscar</button>
-            </div>
-            <!--Id-->
-            <input type="text"  id="idNot">
+         
+            
             <!--Nome-->
             <div class="col-md-4">
                 <label for="inputNameNota" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="inputNameNota" spellcheck="false" required maxlength="21">
+                <input type="text" class="form-control" id="inputNameNota" spellcheck="false" required maxlength="21" disabled>
             </div>
 
             <!--CPF-->
             <div class="col-md-3">
-                <label for="inputCPFNota" class="form-label">CPF/CNPJ</label>
-                <input type="text" class="form-control" id="inputCPFNota" spellcheck="false" maxlength="30">
+                <label for="inputCPFNota" class="form-label">Id Ciente</label>
+                <input type="text" class="form-control" id="iputidClient" spellcheck="false" maxlength="30" disabled>
             </div>
 
             <!--Plca-->
@@ -56,11 +53,7 @@
             </div>
             <!--Linhas-->
             <hr class="mt-4 border-primary border -1">
-            <!--Numero de nota-->
-            <div class="col-md-4">
-                <label for="inputNnota" class="form-label">Numero de nota</label>
-                <input type="number" class="form-control" id="inputNnota" spellcheck="false" >
-            </div>
+         
             <!--Data de entrada e saida do veiculo-->
             <div class="col-md-4">
                 <label for="inputDentradanota" class="form-label">Data de entrada</label>

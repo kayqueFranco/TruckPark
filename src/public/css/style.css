@@ -55,9 +55,8 @@ footer p {
 }
 
 
-#idNot{
-    display: none;
-}
+
+
 
 #idTruck{
     display: none;
@@ -70,5 +69,5 @@ footer p {
 #viewListSuggestion{
     z-index: 2;
     max-width: 382px;
-
+    margin-top: 52px;
 }
