@@ -16,7 +16,8 @@ let Relatorionota = document.getElementById('inputRelatorionota')
 let Orcamento = document.getElementById('inputOrcamento')
 let Fpagamento = document.getElementById('inputFpagamento')
 let notaStatus = document.getElementById('notaStatus')
-let id = document.getElementById('idNot')
+let idNota = document.getElementById('inputNota')
+let dateOS = document.getElementById('inputData')
 
 
 
@@ -36,7 +37,7 @@ frmNota.addEventListener('submit', async (event) => {
         if (id.value === "") {
             // Criar um objeto para armazenar os dados do cliente amtes de enviar ao main
             const Nota = {
-                idNOt: id.value,
+                
 
                 NameN: nameNota.value,
                 PlacN: placNota.value,
@@ -56,7 +57,8 @@ frmNota.addEventListener('submit', async (event) => {
         }else{
             // editar
             const Nota ={
-                idNOt: id.value,
+                
+                placNota: placNota.value,
                 Dentradanota: Dentradanota.value,
                 Dsaidanota:Dsaidanota.value,
                 RelaNota: Relatorionota.value,
@@ -72,7 +74,46 @@ frmNota.addEventListener('submit', async (event) => {
 
 })
 
+// =====================================================
+// ==================Buscar Os - CRUD Read==============
+function findOS(){
+    api.searchNota()
+}
+ 
+api.renderNota((event,dataNota)=>{
+    console.log(dataNota)
+     const nota = JSON.parse(dataNota)
+     idNota.value = nota._id
+    
+     const data = new Date(nota.dataEntrada)
+     const formatada = data.toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+    })
+     
+    dateOS.value = formatada
+    placNota.value= nota. PlacaNota
+    idClient.value= nota. IdCliente
+    Dentradanota.value = nota. DataEntradaNota
+    Dsaidanota .value = nota. DataSaidaNota
+    Relatorionota.value= nota.RelatorioNota
+    Orcamento.value= nota. OrcamentoNota
+    Fpagamento= nota. PagamentoNota
+    notaStatus= nota.StatusNota
+})
+
+
+
+
+
+
+// =======================================================
 function resetForm() {
+    
     // Limpar os campos e resetar o formulario com as configurações pré definidas
     location.reload()
 }
@@ -175,17 +216,5 @@ document.addEventListener('click', (event) => {
 
 // fim do buscar nota==================
 // CRUD REAd==========================================================
-function searchClientNota() {
-    // console.log("teste Botão")
-    // Capturar o cliente
-    let nota = document.getElementById('searchNameNota').value
-    console.log(nota)
-
-    if (nota === "") {
 
 
-        foco.focus()
-    } else {
-
-    }
-}

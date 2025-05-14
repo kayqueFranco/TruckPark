@@ -15,3 +15,10 @@ function camiaoWindow() {
       }
     })
   }
+
+
+
+
+
+     DataEntradaNota.value = nota.Dentradanota ? nota.Dentradanota.split('T')[0] : ""
+    Dsaidanota.value = nota.Dsaidanota ? nota.Dsaidanota.split('T')[0] : ""   

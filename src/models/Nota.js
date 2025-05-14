@@ -7,6 +7,10 @@
 const { model, Schema } = require('mongoose')
 
 const notaSchema = new Schema({
+   dataEntrada:{
+      type:Date,
+      default: Date.now
+   },
    NumNota:{type:String},
    NomeNota: { type: String },
    IdCliente:{type:String},

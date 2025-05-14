@@ -6,6 +6,8 @@ const { app, BrowserWindow, nativeTheme, Menu, ipcMain, dialog, shell } = requir
 // Esta linha está  relacionada ao preload.js
 const path = require('node:path')
 
+const mongose = require('mongoose')
+
 // Importação dis nétodos conectar e desconectar (do modolo de conexão)
 const { conectar, desconectar } = require('./database.js')
 
@@ -120,8 +122,8 @@ function notaWindow() {
   const main = BrowserWindow.getFocusedWindow()
   if (main) {
     nota = new BrowserWindow({
-      width: 1010,
-      height: 720,
+      width: 1070,
+      height: 770,
       //autoHideMenuBar: true,
       resizable: false,
       parent: main,
@@ -650,7 +652,7 @@ ipcMain.on('new-nota', async (event, Nota) => {
 
 // ========================BUscar NOta==========================================
 // ============================================================================
-ipcMain.on('search-nota', (event) => {
+ipcMain.on('search-nota', async (event) => {
   prompt({
     title: 'Busca Nota',
     label: 'Digite  o número da Nota:',
@@ -660,9 +662,34 @@ ipcMain.on('search-nota', (event) => {
     type: 'input',
     width: 400,
     height: 200
-  }).then((result) => {
+  }).then(async (result) => {
     if (result !== null) {
-      console.log(result)
+
+      if (mongose.Types.ObjectId.isValid(result)) {
+        try {
+          const dataNota = await notaModel.findById(result)
+          if (dataNota) {
+            console.log(dataNota)
+            event.reply('render-nota', JSON.stringify(dataNota))
+          } else {
+            dialog.showMessageBox({
+              type: 'warning',
+              title: "Aviso!",
+              message: "Nota não encontrada",
+              buttons: ['OK']
+            })
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      } else {
+        dialog.showMessageBox({
+          type: 'error',
+          title: "Atenção!",
+          message: "Formato fo número da Nota inválido.\nVerifique e tente novmente.",
+          buttons: ['OK']
+        })
+      }
     }
   })
 })
