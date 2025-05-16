@@ -16,7 +16,7 @@ let Relatorionota = document.getElementById('inputRelatorionota')
 let Orcamento = document.getElementById('inputOrcamento')
 let Fpagamento = document.getElementById('inputFpagamento')
 let notaStatus = document.getElementById('notaStatus')
-let idNota = document.getElementById('inputNota')
+let id = document.getElementById('inputNota')
 let dateOS = document.getElementById('inputData')
 
 
@@ -83,7 +83,7 @@ function findOS(){
 api.renderNota((event,dataNota)=>{
     console.log(dataNota)
      const nota = JSON.parse(dataNota)
-     idNota.value = nota._id
+     id.value = nota._id
     
      const data = new Date(nota.dataEntrada)
      const formatada = data.toLocaleString("pt-BR", {
@@ -101,9 +101,9 @@ api.renderNota((event,dataNota)=>{
     Dentradanota.value = nota. DataEntradaNota
     Dsaidanota .value = nota. DataSaidaNota
     Relatorionota.value= nota.RelatorioNota
-    Orcamento.value= nota. OrcamentoNota
-    Fpagamento= nota. PagamentoNota
-    notaStatus= nota.StatusNota
+    Orcamento.value= nota.OrcamentoNota
+    Fpagamento= nota.PagamentoNota
+   notaStatus= nota.statusNota
 })
 
 
