@@ -97,13 +97,16 @@ api.renderNota((event,dataNota)=>{
      
     dateOS.value = formatada
     placNota.value= nota. PlacaNota
+    nameClient.value = nota.NomeNota
     idClient.value= nota. IdCliente
     Dentradanota.value = nota. DataEntradaNota
     Dsaidanota .value = nota. DataSaidaNota
     Relatorionota.value= nota.RelatorioNota
     Orcamento.value= nota.OrcamentoNota
-    Fpagamento= nota.PagamentoNota
-   notaStatus= nota.statusNota
+    Fpagamento.value= nota.PagamentoNota
+    notaStatus.value= nota.StatusNota
+
+    
 })
 
 

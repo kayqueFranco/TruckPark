@@ -122,8 +122,8 @@ function notaWindow() {
   const main = BrowserWindow.getFocusedWindow()
   if (main) {
     nota = new BrowserWindow({
-      width: 1070,
-      height: 770,
+      width: 1050,
+      height: 740,
       //autoHideMenuBar: true,
       resizable: false,
       parent: main,
@@ -726,6 +726,12 @@ ipcMain.on('search-clients', async (event) => {
 
 
 
+
+
+
+// ====================================================================================
+// ===============================RELATORIO ABERTO=====================================
+// ====================================================================================
 
 
 // =================================================================================

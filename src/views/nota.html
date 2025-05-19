@@ -17,6 +17,7 @@
 
     <div class="container">
         <form id="frmNota" class="mt-2 row g-3">
+            <div class="d-flex align-items-end gap-3 flex-wrap">
             <!--Buscar Cliente-->
             <div class="col-md-4">
                 <input type="text" class="form-control" id="searchNameNota" maxlength="30" spellcheck="false"
@@ -27,14 +28,16 @@
             <ul id="viewListSuggestion" class="list-group position-absolute w-100"></ul>
             <div class="col-md-2">
                 <button type="button" class="btn btn-primary" id="btnRead" onclick="searchClientNota()">Buscar</button>
-            </div>
+            </div>  
             <!-- Data -->
             <div class="col-md-3">
                 <label class="form-label">Data de entrada</label>
                 <input type="text" class="form-control" id="inputData" disabled>
             </div>
+            </div>
+       
              <!--Numero de nota-->
-             <div class="col-md-4">
+             <div class="col-md-2">
                 <label for="inputNnota" class="form-label">Numero de nota</label>
                 <input type="text" class="form-control" id="inputNota" spellcheck="false" disabled >
             </div>
@@ -47,13 +50,13 @@
             </div>
 
             <!--CPF-->
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label for="inputCPFNota" class="form-label">Id Ciente</label>
                 <input type="text" class="form-control" id="iputidClient" spellcheck="false" maxlength="30" disabled>
             </div>
 
             <!--Plca-->
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <label for="inputPlacNota" class="form-label">Placa</label>
                 <input type="tel" class="form-control" id="inputPlacNota" spellcheck="false" required maxlength="12">
             </div>
@@ -108,10 +111,14 @@
             <!--Botões-->
             <div class="mt-5">
                 <button type="submit" class="btn btn-success" id="bntCrate">Gerar nota</button>
-                <button type=" submit" class="btn btn-warning" onclick="findOS()">Buscar Nota</button>
                 <button type="button" class="btn btn-danger" id="btnDelete">Excluir nota</button>
                 <button type="submit" class="btn btn-warning" id="btnUpdate">Editar nota</button>
+                <button type="reset" class="btn " id="btnReset" onclick="resetForm()"></button>
+                <button type=" submit" class="btn btn-warning" onclick="findOS()" id="buttonBuscarNota">Buscar Nota</button>
                 <button type="button" class="btn btn-primary">Imprimir nota</button>
+        
+                
+                
             </div>
         </form>
     </div>
