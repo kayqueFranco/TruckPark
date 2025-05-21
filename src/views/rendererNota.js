@@ -16,7 +16,7 @@ let Relatorionota = document.getElementById('inputRelatorionota')
 let Orcamento = document.getElementById('inputOrcamento')
 let Fpagamento = document.getElementById('inputFpagamento')
 let notaStatus = document.getElementById('notaStatus')
-let id = document.getElementById('inputNota')
+let idOS = document.getElementById('inputNota')
 let dateOS = document.getElementById('inputData')
 
 
@@ -32,9 +32,9 @@ frmNota.addEventListener('submit', async (event) => {
         api.validateClient()
     } else {
         //Teste importante ( recebimento dos dados do formulario - passo 1 do fluxo)
-        console.log(nameNota.value, idClient.value, placNota.value, Dentradanota.value, Dsaidanota.value, Relatorionota.value, Orcamento.value, Fpagamento.value, notaStatus.value, id.value)
+        console.log(nameNota.value, idClient.value, placNota.value, Dentradanota.value, Dsaidanota.value, Relatorionota.value, Orcamento.value, Fpagamento.value, notaStatus.value, idOS.value)
 
-        if (id.value === "") {
+        if (idOS.value === "") {
             // Criar um objeto para armazenar os dados do cliente amtes de enviar ao main
             const Nota = {
                 
@@ -55,19 +55,19 @@ frmNota.addEventListener('submit', async (event) => {
             // uso do preload.js
             api.newNota(Nota)
         }else{
-            // editar
-            const Nota ={
-                
-                placNota: placNota.value,
+            //editar
+             const Nota ={
+               id_NOt: idOS.value ,
+               placNota: placNota.value,
                 Dentradanota: Dentradanota.value,
-                Dsaidanota:Dsaidanota.value,
+             Dsaidanota:Dsaidanota.value,
                 RelaNota: Relatorionota.value,
                 orcaNota:Orcamento.value,
-                formNota:Fpagamento.value,
-                statusNota:notaStatus.value
+              formNota:Fpagamento.value,
+               statusNota:notaStatus.value
                 
             }
-            api.UpadateNota(Nota)
+             api.UpadateNota(Nota)
         }
 
     }
@@ -83,7 +83,7 @@ function findOS(){
 api.renderNota((event,dataNota)=>{
     console.log(dataNota)
      const nota = JSON.parse(dataNota)
-     id.value = nota._id
+     idOS.value = nota._id
     
      const data = new Date(nota.dataEntrada)
      const formatada = data.toLocaleString("pt-BR", {
@@ -105,13 +105,19 @@ api.renderNota((event,dataNota)=>{
     Orcamento.value= nota.OrcamentoNota
     Fpagamento.value= nota.PagamentoNota
     notaStatus.value= nota.StatusNota
-
+    // desativer o botão de adicionar
+    bntCrate.disabled = true
+    // ativer os botões editar e excluir
+    btnUpdate.disabled = false
+    btnDelete.disabled = false
     
 })
 
-
-
-
+// delete os ==============================================
+function removeOS() {
+    console.log(idOS.value) // Passo 1 (receber do form o id da OS)
+    api.deleteOS(idOS.value) // Passo 2 (enviar o id da OS ao main)
+}
 
 
 // =======================================================

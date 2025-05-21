@@ -31,6 +31,9 @@ contextBridge.exposeInMainWorld('api', {
     validateClient:() => ipcRenderer.send('validate-client'),
    setSearch: (args)=>ipcRenderer.on('set-search',args),
    newNota:(nota)=>ipcRenderer.send('new-nota',nota),
-   renderNota:(dataNota)=>ipcRenderer.on('render-nota',dataNota)
+   renderNota:(dataNota)=>ipcRenderer.on('render-nota',dataNota),
+   deleteOS: (idOS) => ipcRenderer.send('delete-os', idOS),
+   UpadateNota: (Nota) => ipcRenderer.send('update-nota', Nota)
+   
 
 })

@@ -210,10 +210,11 @@ const template = [
       },
       {
         label: 'OS abertas',
-        click: () => relatorioOs()
+        click: () => relatorioOSAbertas()
       },
       {
-        label: 'OS concluídas'
+        label: 'OS concluídas',
+        click: ()=>relatorioOSFinalizado()
       }
     ]
   },
@@ -732,6 +733,252 @@ ipcMain.on('search-clients', async (event) => {
 // ====================================================================================
 // ===============================RELATORIO ABERTO=====================================
 // ====================================================================================
+async function relatorioOSAbertas() {
+  try {
+
+    const clientes = await notaModel.find({ StatusNota: 'Aberta' }).sort({ Aberta: 1 })
+
+    const doc = new jsPDF('p', 'mm', 'a4')
+
+    const imagePath = path.join(__dirname, 'src', 'public', 'img', 'logo.jpg')
+    const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' })
+    doc.addImage(imageBase64, 'PNG', 20, 8) //(5mm, 8mm x,y)
+
+    doc.setFontSize(18)
+
+    doc.text("Relatório de Ordem de Serviços", 14, 45)//x,y (mm) 
+
+    const dataAtual = new Date().toLocaleDateString('pt-BR')
+    doc.setFontSize(12)
+    doc.text(`Data: ${dataAtual}`, 160, 10)
+
+    let y = 60
+    doc.text("Nome do cliente", 14, y)
+    doc.text("Status da os", 70, y)
+    doc.text("Placa", 120, y)
+
+    y += 5
+
+    doc.setLineWidth(0.5) // expessura da linha
+    doc.line(10, y, 200, y) // inicio e fim
+
+    y += 10 // espaçãmento da linha
+
+    clientes.forEach((c) => {
+
+      if (y > 280) {
+        doc.addPage()
+        y = 20
+        doc.text("Nome do cliente", 14, y)
+        doc.text("Status da os", 70, y)
+        doc.text("Placa", 120, y)
+
+        y += 5
+        doc.setLineWidth(0.5)
+        doc.line(10, y, 200, y)
+        y += 10
+      }
+
+      doc.text(c.NomeNota || "N/A", 14, y)
+      doc.text(c.StatusNota || "N/A", 70, y)
+      doc.text(c.PlacaNota || "N/A", 120, y)
+  
+      y += 10
+    })
+
+    const paginas = doc.internal.getNumberOfPages()
+    for (let i = 1; i <= paginas; i++) {
+      doc.setPage(i)
+      doc.setFontSize(10)
+      doc.text(`Página ${i} de ${paginas}`, 105, 290, { align: 'center' })
+    }
+
+    const tempDir = app.getPath('temp')
+    const filePath = path.join(tempDir, 'ordemservico.pdf')
+
+    doc.save(filePath)
+
+    shell.openPath(filePath)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+
+// ====================================================================================
+// ========================== FIM RELATORIO ABERTO=====================================
+// ====================================================================================
+
+
+
+// ====================================================================================
+// =============================RELATORIO FINALIZADO ==================================
+// ====================================================================================
+
+
+
+
+async function relatorioOSFinalizado() {
+  try {
+
+    const clientes = await notaModel.find({ StatusNota: 'Finalizada' }).sort({ Aberta: 1 })
+
+    const doc = new jsPDF('p', 'mm', 'a4')
+
+    const imagePath = path.join(__dirname, 'src', 'public', 'img', 'logo.jpg')
+    const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' })
+    doc.addImage(imageBase64, 'PNG', 20, 8) //(5mm, 8mm x,y)
+
+    doc.setFontSize(18)
+
+    doc.text("Relatório de Ordem de Serviços", 14, 45)//x,y (mm) 
+
+    const dataAtual = new Date().toLocaleDateString('pt-BR')
+    doc.setFontSize(12)
+    doc.text(`Data: ${dataAtual}`, 160, 10)
+
+    let y = 60
+    doc.text("Nome do cliente", 14, y)
+    doc.text("Status da os", 70, y)
+    doc.text("Placa", 120, y)
+
+    y += 5
+
+    doc.setLineWidth(0.5) // expessura da linha
+    doc.line(10, y, 200, y) // inicio e fim
+
+    y += 10 // espaçãmento da linha
+
+    clientes.forEach((c) => {
+
+      if (y > 280) {
+        doc.addPage()
+        y = 20
+        doc.text("Nome do cliente", 14, y)
+        doc.text("Status da os", 70, y)
+        doc.text("Placa", 120, y)
+
+        y += 5
+        doc.setLineWidth(0.5)
+        doc.line(10, y, 200, y)
+        y += 10
+      }
+
+      doc.text(c.NomeNota || "N/A", 14, y)
+      doc.text(c.StatusNota || "N/A", 70, y)
+      doc.text(c.PlacaNota || "N/A", 120, y)
+  
+      y += 10
+    })
+
+    const paginas = doc.internal.getNumberOfPages()
+    for (let i = 1; i <= paginas; i++) {
+      doc.setPage(i)
+      doc.setFontSize(10)
+      doc.text(`Página ${i} de ${paginas}`, 105, 290, { align: 'center' })
+    }
+
+    const tempDir = app.getPath('temp')
+    const filePath = path.join(tempDir, 'ordemservico.pdf')
+
+    doc.save(filePath)
+
+    shell.openPath(filePath)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+
+
+
+
+// =================================================================================
+// =========================== Excluir os ===========================================
+// ================================================================================
+
+
+
+
+
+
+
+ipcMain.on('delete-os', async (event, idOS) => {
+  console.log(idOS) // teste do passo 2 (recebimento do id)
+  try {
+      //importante - confirmar a exclusão
+      //osScreen é o nome da variável que representa a janela OS
+      const { response } = await dialog.showMessageBox(nota, {
+          type: 'warning',
+          title: "Atenção!",
+          message: "Deseja excluir esta ordem de serviço?\nEsta ação não poderá ser desfeita.",
+          buttons: ['Cancelar', 'Excluir'] //[0, 1]
+      })
+      if (response === 1) {
+          //console.log("teste do if de excluir")
+          //Passo 3 - Excluir a OS
+          const delOS = await notaModel.findByIdAndDelete(idOS)
+          event.reply('resert-form')
+      }
+  } catch (error) {
+      console.log(error)
+  }
+})
+
+
+
+
+
+// =================================================================================
+// =========================== FIM excluir os ===========================================
+// ================================================================================
+
+
+
+ipcMain.on('update-nota', async (event, nota) => {
+  //importante! teste de recebimento dos dados da os (passo 2)
+  console.log(nota)
+  // Alterar os dados da OS no banco de dados MongoDB
+  try {
+      // criar uma nova de estrutura de dados usando a classe modelo. Atenção! Os atributos precisam ser idênticos ao modelo de dados OS.js e os valores são definidos pelo conteúdo do objeto os
+      const updateOS = await notaModel.findByIdAndUpdate(
+          nota.id_OS,
+          {
+             PlacN: nota.placNota,
+             Dentradanota: nota.Dentradanota,
+             Dsaidanota: nota.Dsaidanota,
+             RelaNota: nota.Relatorionota,
+             orcaNota: nota.Orcamento,
+             formNota: nota.Fpagamento,
+             statusNota: nota.notaStatus
+
+          },
+          {
+              new: true
+          }
+      )
+      // Mensagem de confirmação
+      dialog.showMessageBox({
+          //customização
+          type: 'info',
+          title: "Aviso",
+          message: "Dados da OS alterados com sucesso",
+          buttons: ['OK']
+      }).then((result) => {
+          //ação ao pressionar o botão (result = 0)
+          if (result.response === 0) {
+              //enviar um pedido para o renderizador limpar os campos e resetar as configurações pré definidas (rótulo 'reset-form' do preload.js
+              event.reply('resert-form')
+          }
+      })
+  } catch (error) {
+      console.log(error)
+  }
+})
+
+
 
 
 // =================================================================================

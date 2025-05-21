@@ -100,9 +100,9 @@
                 <label class="form-label">Status da OS</label>
                 <select class="form-select" id="notaStatus">
                     <option value=""></option>
-                    <option>Aberta</option>
-                    <option>Em andamento</option>
-                    <option>Finalizada</option>
+                    <option id="Aberta">Aberta</option>
+                    <option >Em andamento</option>
+                    <option id="Finalizada">Finalizada</option>
                     <option>Cancelada</option>
                 </select>
             </div>
@@ -111,7 +111,7 @@
             <!--Botões-->
             <div class="mt-5">
                 <button type="submit" class="btn btn-success" id="bntCrate">Gerar nota</button>
-                <button type="button" class="btn btn-danger" id="btnDelete">Excluir nota</button>
+                <button type="button" class="btn btn-danger" id="btnDelete"onclick="removeOS()">Excluir nota</button>
                 <button type="submit" class="btn btn-warning" id="btnUpdate">Editar nota</button>
                 <button type="reset" class="btn " id="btnReset" onclick="resetForm()"></button>
                 <button type=" submit" class="btn btn-warning" onclick="findOS()" id="buttonBuscarNota">Buscar Nota</button>
