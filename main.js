@@ -214,7 +214,7 @@ const template = [
       },
       {
         label: 'OS concluídas',
-        click: ()=>relatorioOSFinalizado()
+        click: () => relatorioOSFinalizado()
       }
     ]
   },
@@ -782,7 +782,7 @@ async function relatorioOSAbertas() {
       doc.text(c.NomeNota || "N/A", 14, y)
       doc.text(c.StatusNota || "N/A", 70, y)
       doc.text(c.PlacaNota || "N/A", 120, y)
-  
+
       y += 10
     })
 
@@ -868,7 +868,7 @@ async function relatorioOSFinalizado() {
       doc.text(c.NomeNota || "N/A", 14, y)
       doc.text(c.StatusNota || "N/A", 70, y)
       doc.text(c.PlacaNota || "N/A", 120, y)
-  
+
       y += 10
     })
 
@@ -908,22 +908,22 @@ async function relatorioOSFinalizado() {
 ipcMain.on('delete-os', async (event, idOS) => {
   console.log(idOS) // teste do passo 2 (recebimento do id)
   try {
-      //importante - confirmar a exclusão
-      //osScreen é o nome da variável que representa a janela OS
-      const { response } = await dialog.showMessageBox(nota, {
-          type: 'warning',
-          title: "Atenção!",
-          message: "Deseja excluir esta ordem de serviço?\nEsta ação não poderá ser desfeita.",
-          buttons: ['Cancelar', 'Excluir'] //[0, 1]
-      })
-      if (response === 1) {
-          //console.log("teste do if de excluir")
-          //Passo 3 - Excluir a OS
-          const delOS = await notaModel.findByIdAndDelete(idOS)
-          event.reply('resert-form')
-      }
+    //importante - confirmar a exclusão
+    //osScreen é o nome da variável que representa a janela OS
+    const { response } = await dialog.showMessageBox(nota, {
+      type: 'warning',
+      title: "Atenção!",
+      message: "Deseja excluir esta ordem de serviço?\nEsta ação não poderá ser desfeita.",
+      buttons: ['Cancelar', 'Excluir'] //[0, 1]
+    })
+    if (response === 1) {
+      //console.log("teste do if de excluir")
+      //Passo 3 - Excluir a OS
+      const delOS = await notaModel.findByIdAndDelete(idOS)
+      event.reply('resert-form')
+    }
   } catch (error) {
-      console.log(error)
+    console.log(error)
   }
 })
 
@@ -935,55 +935,179 @@ ipcMain.on('delete-os', async (event, idOS) => {
 // =========================== FIM excluir os ===========================================
 // ================================================================================
 
+// ============================================================
+// == Editar OS - CRUD Update =================================
 
-
-ipcMain.on('update-nota', async (event, nota) => {
-  //importante! teste de recebimento dos dados da os (passo 2)
-  console.log(nota)
-  // Alterar os dados da OS no banco de dados MongoDB
+ipcMain.on('update-nota', async (event, Nota) => {
   try {
-      // criar uma nova de estrutura de dados usando a classe modelo. Atenção! Os atributos precisam ser idênticos ao modelo de dados OS.js e os valores são definidos pelo conteúdo do objeto os
-      const updateOS = await notaModel.findByIdAndUpdate(
-          nota.id_OS,
-          {
-             PlacN: nota.placNota,
-             Dentradanota: nota.Dentradanota,
-             Dsaidanota: nota.Dsaidanota,
-             RelaNota: nota.Relatorionota,
-             orcaNota: nota.Orcamento,
-             formNota: nota.Fpagamento,
-             statusNota: nota.notaStatus
+    console.log('Dados recebidos para update:', Nota)
 
-          },
-          {
-              new: true
-          }
-      )
-      // Mensagem de confirmação
-      dialog.showMessageBox({
-          //customização
-          type: 'info',
-          title: "Aviso",
-          message: "Dados da OS alterados com sucesso",
-          buttons: ['OK']
-      }).then((result) => {
-          //ação ao pressionar o botão (result = 0)
-          if (result.response === 0) {
-              //enviar um pedido para o renderizador limpar os campos e resetar as configurações pré definidas (rótulo 'reset-form' do preload.js
-              event.reply('resert-form')
-          }
-      })
+    const updateOS = await notaModel.findByIdAndUpdate(
+      Nota.idOS,
+      {
+        IdCliente: Nota.IdCliente,
+        PlacaNota: Nota.PlacaNota,
+        DataEntradaNota: Nota.DataEntradaNota,
+        DataSaidaNota: Nota.DataSaidaNota,
+        RelatorioNota: Nota.RelatorioNota,
+        OrcamentoNota: Nota.OrcamentoNota,
+        PagamentoNota: Nota.PagamentoNota,
+        StatusNota: Nota.StatusNota
+      },
+      { new: true }
+    )
+
+    console.log('Resultado do update:', updateOS)
+
+    dialog.showMessageBox({
+      type: 'info',
+      title: "Aviso",
+      message: "Dados da OS alterados com sucesso",
+      buttons: ['OK']
+    }).then(result => {
+      if (result.response === 0) {
+        event.reply('resert-form')  // lembre-se que aqui deve ser 'reset-form', e não 'resert-form'
+      }
+    })
+
   } catch (error) {
-      console.log(error)
+    console.error('Erro no update:', error)
   }
 })
 
+
+
+// == Fim Editar OS - CRUD Update =============================
+// ============================================================
+
+
+// Impressão de os ========================================================================================================================================
+
+
+ipcMain.on('print-os', async (event) => {
+  prompt({
+    title: 'Imprimir OS',
+    label: 'Digite  o número da Nota:',
+    inputAttrs: {
+      type: 'text'
+    },
+    type: 'input',
+    width: 400,
+    height: 200
+  }).then(async (result) => {
+    if (result !== null) {
+
+      if (mongose.Types.ObjectId.isValid(result)) {
+        try {
+          //  teste importante
+          // console.log("imprimir os")
+
+          const dataNota = await notaModel.findById(result)
+          if (dataNota) {
+            console.log(dataNota)
+            // extrair os dados doo cliente  de acorso com o id cliente vinculado a os
+            const clients = await clientModel.find({ 
+                _id: dataNota.IdCliente 
+             })
+
+
+
+            console.log(clients)
+              // formatação do documento pdf
+              const doc = new jsPDF('p', 'mm', 'a4')
+              const imagePath = path.join(__dirname, 'src', 'public', 'img', 'logo.jpg')
+              const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' })
+              doc.addImage(imageBase64, 'PNG', 5, 8)
+              doc.setFontSize(18)
+              doc.text("OS:", 14, 45) //x=14, y=45
+              
+              // Extração dos dados da OS e do cliente vinculado
+
+              // Texto do termo de serviço
+              doc.setFontSize(10)
+              const termo = `Objeto do serviço
+Estabelece que o serviço prestado é a guarda temporária do(s) caminhão(ões) nas dependências do estacionamento, mediante pagamento e sob condições previamente acordadas.
+  Base legal: Art. 593 do Código Civil (contrato de depósito).
+
+Garantia oferecida pelo estabelecimento
+O estacionamento garante a guarda do veículo em segurança, com vigilância e/ou monitoramento, responsabilizando-se por danos causados por culpa ou dolo de seus prepostos (funcionários).
+   Base legal: Art. 932 e 933 do Código Civil.
+
+Limitações da garantia
+O estabelecimento não se responsabiliza por:
+
+Objetos pessoais deixados no interior do veículo;
+
+Danos causados por terceiros ou por caso fortuito/força maior (ex: enchentes, raios);
+
+Falhas mecânicas não relacionadas ao serviço.
+  Base legal: Art. 393 do Código Civil (força maior), Art. 14, §3º, II do CDC (excludentes de responsabilidade).
+
+Responsabilidades do usuário
+O usuário deve entregar o veículo em condições normais, sem objetos de valor visíveis, e retirar seus pertences antes do estacionamento. Deve também apresentar o comprovante de entrada para retirada do veículo.
+   Base legal: Dever de boa-fé objetiva — Art. 422 do Código Civil.
+
+Procedimentos de entrada e saída do veículo
+A entrada e saída do caminhão devem ser registradas com data, hora, identificação do veículo e vistoria (quando aplicável). A apresentação do comprovante de entrada é obrigatória para liberação do veículo.
+   Base legal: Princípio da segurança contratual e da boa-fé (Art. 421 e 422 do Código Civil).
+
+Vigência da garantia
+A responsabilidade do estabelecimento começa com a entrada do veículo no estacionamento e termina com a sua retirada mediante apresentação do comprovante.
+   Base legal: Art. 627 e 628 do Código Civil (prazo do contrato de depósito).
+
+Foro para resolução de conflitos
+Em caso de disputa judicial, fica eleito o foro da comarca onde se localiza o estacionamento ou onde reside o consumidor, conforme escolha do consumidor.
+    Base legal: Art. 101, I do CDC (foro do domicílio do consumidor).
+
+`
+  // Inserir o termo no PDF
+  doc.text(termo, 14, 60, { maxWidth: 180 }) // x=14, y=60, largura máxima para quebrar o texto automaticamente
+
+  // Definir o caminho do arquivo temporário e nome do arquivo
+  const tempDir = app.getPath('temp')
+  const filePath = path.join(tempDir, 'os.pdf')
+  // salvar temporariamente o arquivo
+  doc.save(filePath)
+  // abrir o arquivo no aplicativo padrão de leitura de pdf do computador do usuário
+  shell.openPath(filePath)
+          } else {
+            dialog.showMessageBox({
+              type: 'warning',
+              title: "Aviso!",
+              message: "Nota não encontrada",
+              buttons: ['OK']
+            })
+          }
+
+        } catch (error) {
+          console.log(error)
+        }
+      } else {
+        dialog.showMessageBox({
+          type: 'error',
+          title: "Atenção!",
+          message: "Código da OS inválido.\nVerifique e tente novamente.",
+          buttons: ['OK']
+      })
+      }
+    }
+  })
+})
+
+
+
+// fim impressão de os =========================================================================================================================================
 
 
 
 // =================================================================================
 // =========================== FIM A OS  ===========================================
 // ================================================================================
+
+
+
+
+
 
 
 

@@ -286,6 +286,7 @@ api.setClient((args) => {
         // Se contém apenas números
         cpfClient.value = campoBusca;
     }
+    restaurarEter()
 })
 // ==========Fim CRUd Read===============================================================
 

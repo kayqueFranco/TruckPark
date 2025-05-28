@@ -33,7 +33,8 @@ contextBridge.exposeInMainWorld('api', {
    newNota:(nota)=>ipcRenderer.send('new-nota',nota),
    renderNota:(dataNota)=>ipcRenderer.on('render-nota',dataNota),
    deleteOS: (idOS) => ipcRenderer.send('delete-os', idOS),
-   UpadateNota: (Nota) => ipcRenderer.send('update-nota', Nota)
+   updateNota: (Nota) => ipcRenderer.send('update-nota', Nota),
+    printOS:()=> ipcRenderer.send('print-os')
    
 
 })

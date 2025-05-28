@@ -55,19 +55,21 @@ frmNota.addEventListener('submit', async (event) => {
             // uso do preload.js
             api.newNota(Nota)
         }else{
-            //editar
-             const Nota ={
-               id_NOt: idOS.value ,
-               placNota: placNota.value,
-                Dentradanota: Dentradanota.value,
-             Dsaidanota:Dsaidanota.value,
-                RelaNota: Relatorionota.value,
-                orcaNota:Orcamento.value,
-              formNota:Fpagamento.value,
-               statusNota:notaStatus.value
-                
-            }
-             api.UpadateNota(Nota)
+            const Nota = {
+                idOS: idOS.value,
+                IdCliente: idClient.value,
+                PlacaNota: placNota.value,
+                DataEntradaNota: Dentradanota.value,
+                DataSaidaNota: Dsaidanota.value,
+                RelatorioNota: Relatorionota.value,
+                OrcamentoNota: Orcamento.value,
+                PagamentoNota: Fpagamento.value,
+                StatusNota: notaStatus.value
+              }
+              
+              api.updateNota(Nota)
+              
+            
         }
 
     }
@@ -213,17 +215,26 @@ document.addEventListener('click', (event) => {
 
 
 
+// imprimir a os ==================================================
+// ================================================================
+
+function gerateOS(){
+    api.printOS()
+}
 
 
 
-// BUscar NOta ==================================
+
+// ===========fim imprimir a os====================================
+// ===============================================================
 
 
 
 
 
 
-// fim do buscar nota==================
-// CRUD REAd==========================================================
+
+
+// REAd==========================================================
 
 
