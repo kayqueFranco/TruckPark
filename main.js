@@ -616,37 +616,32 @@ ipcMain.on('new-nota', async (event, Nota) => {
       StatusNota: Nota.statusNota
     })
     await newNota.save()
+    // Obter o ID gerado automaticamente pelo MongoDB
+    const osId = newNota._id
+    console.log("ID da nova OS:", osId)
+
+    // Mensagem de confirmação
     dialog.showMessageBox({
-      // customização 
-      type: 'info',
-      title: "Aviso",
-      message: " Nota adicionado com sucesso",
-      buttons: ['ok']
+        //customização
+        type: 'info',
+        title: "Aviso",
+        message: "OS gerada com sucesso.\nDeseja imprimir esta OS?",
+        buttons: ['Sim', 'Não'] // [0, 1]
     }).then((result) => {
-      // ação ao precionar o botão ok
-      if (result.response === 0) {
-        // enviar um pedido para o renderizador limpar os campos e resetar as comfigurações pre defenidas
-        event.reply('resert-form')
-
-      }
-    })
-
-
-  } catch (error) {
-    if (error.code === 11000) {
-      dialog.showMessageBox({
-        type: 'error',
-        title: "Atenção",
-        message: " Nota ja esta Tem Nota\nVerifique se digitou corretamente",
-        buttons: ['ok']
-      }).then((result) => {
+        //ação ao pressionar o botão (result = 0)
         if (result.response === 0) {
-          // 
+            // executar a função printOS passando o id da OS como parâmetro
+            printOS(osId)
+            //enviar um pedido para o renderizador limpar os campos e resetar as configurações pré definidas (rótulo 'reset-form' do preload.js
+            event.reply('reset-form')
+        } else {
+            //enviar um pedido para o renderizador limpar os campos e resetar as configurações pré definidas (rótulo 'reset-form' do preload.js
+            event.reply('reset-form')
         }
-      })
-    }
+    })
+} catch (error) {
     console.log(error)
-  }
+}
 })
 
 
@@ -987,117 +982,210 @@ ipcMain.on('update-nota', async (event, Nota) => {
 ipcMain.on('print-os', async (event) => {
   prompt({
     title: 'Imprimir OS',
-    label: 'Digite  o número da Nota:',
-    inputAttrs: {
-      type: 'text'
-    },
+    label: 'Digite o número da Nota:',
+    inputAttrs: { type: 'text' },
     type: 'input',
     width: 400,
     height: 200
   }).then(async (result) => {
-    if (result !== null) {
+    if (result !== null && mongose.Types.ObjectId.isValid(result)) {
+      try {
+        const dataNota = await notaModel.findById(result)
+        if (!dataNota) {
+          return dialog.showMessageBox({
+            type: 'warning',
+            title: "Aviso!",
+            message: "Nota não encontrada",
+            buttons: ['OK']
+          })
+        }
 
-      if (mongose.Types.ObjectId.isValid(result)) {
-        try {
-          //  teste importante
-          // console.log("imprimir os")
+        const clients = await clientModel.find({ _id: dataNota.IdCliente })
 
-          const dataNota = await notaModel.findById(result)
-          if (dataNota) {
-            console.log(dataNota)
-            // extrair os dados doo cliente  de acorso com o id cliente vinculado a os
-            const clients = await clientModel.find({ 
-                _id: dataNota.IdCliente 
-             })
+        // Criar PDF
+        const doc = new jsPDF('p', 'mm', 'a4')
+        const imagePath = path.join(__dirname, 'src', 'public', 'img', 'logo.jpg')
+        const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' })
+        doc.addImage(imageBase64, 'PNG', 5, 8)
+        doc.setFontSize(18)
+        doc.text("Ordem de Serviço", 14, 45)
 
+        // Espaçamento dinâmico
+        let y = 55
 
+        // Dados do Cliente
+        doc.setFontSize(12)
+        clients.forEach((c) => {
+          doc.text(`Cliente: ${c.nomeCliente || "N/A"}`, 14, y)
+          y += 7
+          doc.text(`ID Cliente: ${String(c._id)}`, 14, y)
+          y += 10
+        })
 
-            console.log(clients)
-              // formatação do documento pdf
-              const doc = new jsPDF('p', 'mm', 'a4')
-              const imagePath = path.join(__dirname, 'src', 'public', 'img', 'logo.jpg')
-              const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' })
-              doc.addImage(imageBase64, 'PNG', 5, 8)
-              doc.setFontSize(18)
-              doc.text("OS:", 14, 45) //x=14, y=45
-              
-              // Extração dos dados da OS e do cliente vinculado
+        // Dados da OS
+        doc.text(`Relatório: ${dataNota.RelatorioNota || "N/A"}`, 14, y)
+        y += 7
+        doc.text(`Placa: ${dataNota.PlacaNota || "N/A"}`, 14, y)
+        y += 7
+        doc.text(`Status: ${dataNota.StatusNota || "N/A"}`, 14, y)
+        y += 10
 
-              // Texto do termo de serviço
-              doc.setFontSize(10)
-              const termo = `Objeto do serviço
+        // Termo de responsabilidade
+        doc.setFontSize(10)
+        const termo = `Objeto do serviço
 Estabelece que o serviço prestado é a guarda temporária do(s) caminhão(ões) nas dependências do estacionamento, mediante pagamento e sob condições previamente acordadas.
   Base legal: Art. 593 do Código Civil (contrato de depósito).
 
 Garantia oferecida pelo estabelecimento
 O estacionamento garante a guarda do veículo em segurança, com vigilância e/ou monitoramento, responsabilizando-se por danos causados por culpa ou dolo de seus prepostos (funcionários).
-   Base legal: Art. 932 e 933 do Código Civil.
+  Base legal: Art. 932 e 933 do Código Civil.
 
 Limitações da garantia
 O estabelecimento não se responsabiliza por:
-
-Objetos pessoais deixados no interior do veículo;
-
-Danos causados por terceiros ou por caso fortuito/força maior (ex: enchentes, raios);
-
-Falhas mecânicas não relacionadas ao serviço.
+- Objetos pessoais deixados no interior do veículo;
+- Danos causados por terceiros ou por caso fortuito/força maior (ex: enchentes, raios);
+- Falhas mecânicas não relacionadas ao serviço.
   Base legal: Art. 393 do Código Civil (força maior), Art. 14, §3º, II do CDC (excludentes de responsabilidade).
 
 Responsabilidades do usuário
 O usuário deve entregar o veículo em condições normais, sem objetos de valor visíveis, e retirar seus pertences antes do estacionamento. Deve também apresentar o comprovante de entrada para retirada do veículo.
-   Base legal: Dever de boa-fé objetiva — Art. 422 do Código Civil.
+  Base legal: Dever de boa-fé objetiva — Art. 422 do Código Civil.
 
 Procedimentos de entrada e saída do veículo
 A entrada e saída do caminhão devem ser registradas com data, hora, identificação do veículo e vistoria (quando aplicável). A apresentação do comprovante de entrada é obrigatória para liberação do veículo.
-   Base legal: Princípio da segurança contratual e da boa-fé (Art. 421 e 422 do Código Civil).
+  Base legal: Princípio da segurança contratual e da boa-fé (Art. 421 e 422 do Código Civil).
 
 Vigência da garantia
 A responsabilidade do estabelecimento começa com a entrada do veículo no estacionamento e termina com a sua retirada mediante apresentação do comprovante.
-   Base legal: Art. 627 e 628 do Código Civil (prazo do contrato de depósito).
+  Base legal: Art. 627 e 628 do Código Civil (prazo do contrato de depósito).
 
 Foro para resolução de conflitos
 Em caso de disputa judicial, fica eleito o foro da comarca onde se localiza o estacionamento ou onde reside o consumidor, conforme escolha do consumidor.
-    Base legal: Art. 101, I do CDC (foro do domicílio do consumidor).
+  Base legal: Art. 101, I do CDC (foro do domicílio do consumidor).`
 
-`
-  // Inserir o termo no PDF
-  doc.text(termo, 14, 60, { maxWidth: 180 }) // x=14, y=60, largura máxima para quebrar o texto automaticamente
+        doc.text(termo, 14, y, { maxWidth: 180 })
 
-  // Definir o caminho do arquivo temporário e nome do arquivo
-  const tempDir = app.getPath('temp')
-  const filePath = path.join(tempDir, 'os.pdf')
-  // salvar temporariamente o arquivo
-  doc.save(filePath)
-  // abrir o arquivo no aplicativo padrão de leitura de pdf do computador do usuário
-  shell.openPath(filePath)
-          } else {
-            dialog.showMessageBox({
-              type: 'warning',
-              title: "Aviso!",
-              message: "Nota não encontrada",
-              buttons: ['OK']
-            })
-          }
+        // Salvar e abrir PDF
+        const filePath = path.join(app.getPath('temp'), 'os.pdf')
+        doc.save(filePath)
+        shell.openPath(filePath)
 
-        } catch (error) {
-          console.log(error)
-        }
-      } else {
-        dialog.showMessageBox({
-          type: 'error',
-          title: "Atenção!",
-          message: "Código da OS inválido.\nVerifique e tente novamente.",
-          buttons: ['OK']
-      })
+      } catch (error) {
+        console.error("Erro ao gerar PDF da OS:", error)
       }
+    } else {
+      dialog.showMessageBox({
+        type: 'error',
+        title: "Atenção!",
+        message: "Código da OS inválido.\nVerifique e tente novamente.",
+        buttons: ['OK']
+      })
     }
   })
 })
 
 
 
-// fim impressão de os =========================================================================================================================================
 
+
+
+
+
+
+
+
+
+// fim impressão de os =========================================================================================================================================
+async function printOS(osId) {
+  try {
+    const dataNota = await notaModel.findById(osId)
+
+    if (!dataNota) {
+      console.log("OS não encontrada.")
+      return
+    }
+
+    const clients = await clientModel.find({ _id: dataNota.IdCliente })
+    if (!clients || clients.length === 0) {
+      console.log("Cliente não encontrado.")
+      return
+    }
+
+    // Inicializa o PDF
+    const doc = new jsPDF('p', 'mm', 'a4')
+    const imagePath = path.join(__dirname, 'src', 'public', 'img', 'logo.jpg')
+    const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' })
+    doc.addImage(imageBase64, 'PNG', 5, 8)
+
+    doc.setFontSize(18)
+    doc.text("Ordem de Serviço", 14, 45)
+
+    let y = 55 // posição inicial após o título
+
+    // ======= Dados do Cliente =======
+    doc.setFontSize(12)
+    clients.forEach((c) => {
+      doc.text(`Cliente: ${c.nomeCliente || "N/A"}`, 14, y)
+      y += 7
+      doc.text(`ID Cliente: ${String(c._id)}`, 14, y)
+      y += 10
+    })
+
+   
+        // Dados da OS
+        doc.text(`Relatório: ${dataNota.RelatorioNota || "N/A"}`, 14, y)
+        y += 7
+        doc.text(`Placa: ${dataNota.PlacaNota || "N/A"}`, 14, y)
+        y += 7
+        doc.text(`Status: ${dataNota.StatusNota || "N/A"}`, 14, y)
+        y += 10
+
+    // ======= Termo de responsabilidade =======
+    doc.setFontSize(10)
+    const termo = `Objeto do serviço
+Estabelece que o serviço prestado é a guarda temporária do(s) caminhão(ões) nas dependências do estacionamento, mediante pagamento e sob condições previamente acordadas.
+  Base legal: Art. 593 do Código Civil (contrato de depósito).
+
+Garantia oferecida pelo estabelecimento
+O estacionamento garante a guarda do veículo em segurança, com vigilância e/ou monitoramento, responsabilizando-se por danos causados por culpa ou dolo de seus prepostos (funcionários).
+  Base legal: Art. 932 e 933 do Código Civil.
+
+Limitações da garantia
+O estabelecimento não se responsabiliza por:
+- Objetos pessoais deixados no interior do veículo;
+- Danos causados por terceiros ou por caso fortuito/força maior (ex: enchentes, raios);
+- Falhas mecânicas não relacionadas ao serviço.
+  Base legal: Art. 393 do Código Civil (força maior), Art. 14, §3º, II do CDC (excludentes de responsabilidade).
+
+Responsabilidades do usuário
+O usuário deve entregar o veículo em condições normais, sem objetos de valor visíveis, e retirar seus pertences antes do estacionamento. Deve também apresentar o comprovante de entrada para retirada do veículo.
+  Base legal: Dever de boa-fé objetiva — Art. 422 do Código Civil.
+
+Procedimentos de entrada e saída do veículo
+A entrada e saída do caminhão devem ser registradas com data, hora, identificação do veículo e vistoria (quando aplicável). A apresentação do comprovante de entrada é obrigatória para liberação do veículo.
+  Base legal: Princípio da segurança contratual e da boa-fé (Art. 421 e 422 do Código Civil).
+
+Vigência da garantia
+A responsabilidade do estabelecimento começa com a entrada do veículo no estacionamento e termina com a sua retirada mediante apresentação do comprovante.
+  Base legal: Art. 627 e 628 do Código Civil (prazo do contrato de depósito).
+
+Foro para resolução de conflitos
+Em caso de disputa judicial, fica eleito o foro da comarca onde se localiza o estacionamento ou onde reside o consumidor, conforme escolha do consumidor.
+  Base legal: Art. 101, I do CDC (foro do domicílio do consumidor).`
+
+    // Insere o termo a partir da última linha y
+    doc.text(termo, 14, y, { maxWidth: 180 })
+
+    // Salvar PDF
+    const tempDir = app.getPath('temp')
+    const filePath = path.join(tempDir, 'os.pdf')
+    doc.save(filePath)
+    shell.openPath(filePath)
+
+  } catch (error) {
+    console.error("Erro ao gerar o PDF da OS:", error)
+  }
+}
 
 
 // =================================================================================

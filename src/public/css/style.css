@@ -68,10 +68,9 @@ footer p {
 /*lista de clientes vinculado a nota*/
 #viewListSuggestion{
     z-index: 2;
-    max-width: 382px;
-    margin-top: 52px;
+    max-width: 301px;
+    top: 101px;
 }
-
 
 
 #buttonBuscarNota{
