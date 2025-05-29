@@ -195,7 +195,8 @@ input.addEventListener('input', () => {
                 IdCliente.value = c._id
                 // limpar o input e recolher a lista
                 input.value = ""
-                suggestionList.value = ""
+                suggestionList.innerHTML = ""
+                
             })
         })
 
