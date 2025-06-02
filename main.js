@@ -633,10 +633,10 @@ ipcMain.on('new-nota', async (event, Nota) => {
             // executar a função printOS passando o id da OS como parâmetro
             printOS(osId)
             //enviar um pedido para o renderizador limpar os campos e resetar as configurações pré definidas (rótulo 'reset-form' do preload.js
-            event.reply('reset-form')
+            event.reply('resert-form')
         } else {
             //enviar um pedido para o renderizador limpar os campos e resetar as configurações pré definidas (rótulo 'reset-form' do preload.js
-            event.reply('reset-form')
+            event.reply('resert-form')
         }
     })
 } catch (error) {
