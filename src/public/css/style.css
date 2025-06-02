@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-/* Botões  (tela principal)*/
+
 .buttom img {
     margin: 50px 15px 25px 15px ;
     padding: 5px;
@@ -30,7 +30,6 @@ footer p {
 }
 
 
-/* Botao reset */
 #btnReset {
     width: 64px;
     height: 64px;
@@ -47,8 +46,6 @@ footer p {
     cursor: none;
 }
 
-
-/* ocutar o campo id do cliente */
 #idClient{
     display: none;
     
@@ -64,8 +61,6 @@ footer p {
 
 
 
-
-/*lista de clientes vinculado a nota*/
 #viewListSuggestion{
     z-index: 2;
     max-width: 301px;

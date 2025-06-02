@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nota</title>
-    <!--Bootstrap-->
+
     <link rel="stylesheet" href="../public/css/bootstrap.min.css">
-    <!--css personalizar-->
+   
     <link rel="stylesheet" href="../public/css/style.css">
-    <!--Inpedir a execulção de scripts externos ou não autorizados-->
+
     <meta http-equiv="content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
 </head>
 
@@ -18,52 +18,51 @@
     <div class="container">
         <form id="frmNota" class="mt-2 row g-3">
             <div class="d-flex align-items-end gap-3 flex-wrap">
-            <!--Buscar Cliente-->
+           
             <div class="col-md-4">
                 <input type="text" class="form-control" id="searchNameNota" maxlength="30" spellcheck="false"
                     placeholder="Buscar cliente">
             </div>
 
-            <!--Listar susgetões -estilo google-->
+           
             <ul id="viewListSuggestion" class="list-group position-absolute w-100"></ul>
             <div class="col-md-2">
                 <button type="button" class="btn btn-primary" id="btnRead" onclick="searchClientNota()">Buscar</button>
             </div>  
-            <!-- Data -->
+
             <div class="col-md-3">
                 <label class="form-label">Data de entrada</label>
                 <input type="text" class="form-control" id="inputData" disabled>
             </div>
             </div>
        
-             <!--Numero de nota-->
+ 
              <div class="col-md-2">
                 <label for="inputNnota" class="form-label">Numero de nota</label>
                 <input type="text" class="form-control" id="inputNota" spellcheck="false" disabled >
             </div>
          
             
-            <!--Nome-->
+
             <div class="col-md-4">
                 <label for="inputNameNota" class="form-label">Nome</label>
                 <input type="text" class="form-control" id="inputNameNota" spellcheck="false" required maxlength="21" disabled>
             </div>
 
-            <!--CPF-->
             <div class="col-md-2">
                 <label for="inputCPFNota" class="form-label">Id Ciente</label>
                 <input type="text" class="form-control" id="iputidClient" spellcheck="false" maxlength="30" disabled>
             </div>
 
-            <!--Plca-->
+    
             <div class="col-md-2">
                 <label for="inputPlacNota" class="form-label">Placa</label>
                 <input type="tel" class="form-control" id="inputPlacNota" spellcheck="false" required maxlength="12">
             </div>
-            <!--Linhas-->
+
             <hr class="mt-4 border-primary border -1">
          
-            <!--Data de entrada e saida do veiculo-->
+     
             <div class="col-md-4">
                 <label for="inputDentradanota" class="form-label">Data de entrada</label>
                 <input type="date" class="form-control" id="inputDentradanota" spellcheck="false" >
@@ -72,18 +71,17 @@
                 <label for="inputDsaidanota" class="form-label">Data de Saída</label>
                 <input type="date" class="form-control" id="inputDsaidanota" spellcheck="false" >
             </div>
-            <!--Relatório-->
+       
             <div class="col-md-12">
                 <label for="inputRelatorionota" class="form-label">Relatoriodo</label>
                 <textarea class="form-control" id="inputRelatorionota" rows="3" maxlength="200"></textarea>
             </div>
-            <!-- Orçamento do serviço -->
+        
             <div class="col-md-3">
                 <label for="inputOcamento" class="form-label">Orçamento do serviço</label>
                 <input type="text" class="form-control" id="inputOrcamento" spellcheck="false" required maxlength="30">
             </div>
 
-            <!-- Forma de pagamento -->
             <div class="col-md-3">
                 <label for="inputFpagamento" class="form-label">Forma de pagamento</label>
                 <select type="text" class="form-select" id="inputFpagamento" spellcheck="false" required maxlength="20">
@@ -95,7 +93,7 @@
                     <option>Boleto</option>
                 </select>
             </div>
-            <!-- Status -->
+
             <div class="col-md-3">
                 <label class="form-label">Status da OS</label>
                 <select class="form-select" id="notaStatus">
@@ -108,7 +106,7 @@
             </div>
 
 
-            <!--Botões-->
+
             <div class="mt-5">
                 <button type="submit" class="btn btn-success" id="bntCrate">Gerar nota</button>
                 <button type="button" class="btn btn-danger" id="btnDelete"onclick="removeOS()">Excluir nota</button>
