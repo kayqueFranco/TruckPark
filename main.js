@@ -604,7 +604,7 @@ async function relatorioOSAbertas() {
 
     doc.setFontSize(18)
 
-    doc.text("Relatório de Ordem de Serviços", 14, 45)
+    doc.text("Relatório Da Nota", 14, 45)
 
     const dataAtual = new Date().toLocaleDateString('pt-BR')
     doc.setFontSize(12)
@@ -676,7 +676,7 @@ async function relatorioOSFinalizado() {
 
     doc.setFontSize(18)
 
-    doc.text("Relatório de Ordem de Serviços", 14, 45)
+    doc.text("Relatório da Nota ", 14, 45)
 
     const dataAtual = new Date().toLocaleDateString('pt-BR')
     doc.setFontSize(12)
@@ -823,7 +823,7 @@ ipcMain.on('print-os', async (event) => {
         const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' })
         doc.addImage(imageBase64, 'PNG', 5, 8)
         doc.setFontSize(18)
-        doc.text("Ordem de Serviço", 14, 45)
+        doc.text("Nota", 14, 45)
 
 
         let y = 55
@@ -904,7 +904,7 @@ async function printOS(osId) {
     const dataNota = await notaModel.findById(osId)
 
     if (!dataNota) {
-      console.log("OS não encontrada.")
+      console.log("Nota  não encontrada.")
       return
     }
 
@@ -921,7 +921,7 @@ async function printOS(osId) {
     doc.addImage(imageBase64, 'PNG', 5, 8)
 
     doc.setFontSize(18)
-    doc.text("Ordem de Serviço", 14, 45)
+    doc.text("Nota ", 14, 45)
 
     let y = 55
 
